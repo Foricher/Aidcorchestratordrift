@@ -21,7 +21,7 @@ const mockDevices: Device[] = [
     site: "Brest Lab", 
     status: "active", 
     lastCheck: "2 min ago",
-    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check"]
+    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check", "BGP", "OSPF"]
   },
   { 
     id: 2, 
@@ -31,7 +31,7 @@ const mockDevices: Device[] = [
     site: "Brest Lab", 
     status: "active", 
     lastCheck: "5 min ago",
-    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check"]
+    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check", "OSPF"]
   },
   { 
     id: 3, 
@@ -61,7 +61,7 @@ const mockDevices: Device[] = [
     site: "Thousand Oaks", 
     status: "inactive", 
     lastCheck: "2 hours ago",
-    complianceRules: ["Password Complexity", "NTP Server Sync"]
+    complianceRules: ["Password Complexity", "NTP Server Sync", "BGP"]
   },
 ];
 

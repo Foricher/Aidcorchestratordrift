@@ -88,6 +88,16 @@ export function Layout() {
                       >
                         Compliance Rules
                       </Link>
+                      <Link
+                        to="/setup/drift-remediation"
+                        className={`block px-2 py-1.5 text-sm rounded transition-colors ${
+                          isActive("/setup/drift-remediation")
+                            ? "bg-blue-50 text-blue-700 font-medium"
+                            : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                        }`}
+                      >
+                        Remediation
+                      </Link>
                     </div>
                   )}
                 </div>

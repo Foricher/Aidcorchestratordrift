@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Plus, Search, Edit, Trash2, CheckCircle, AlertCircle } from "lucide-react";
+import { useNavigate } from "react-router";
 
 interface ComplianceRule {
   id: number;
@@ -45,6 +46,22 @@ const mockRules: ComplianceRule[] = [
   },
   {
     id: 5,
+    name: "BGP",
+    description: "Verify BGP routing protocol configuration",
+    severity: "critical",
+    enabled: true,
+    devices: 12
+  },
+  {
+    id: 6,
+    name: "OSPF",
+    description: "Ensure OSPF routing protocol is properly configured",
+    severity: "critical",
+    enabled: true,
+    devices: 10
+  },
+  {
+    id: 7,
     name: "Banner Configuration",
     description: "Verify login banners are configured",
     severity: "low",
@@ -62,6 +79,7 @@ const severityColors = {
 
 export function ComplianceRules() {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   const filteredRules = mockRules.filter(rule =>
     rule.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -72,7 +90,10 @@ export function ComplianceRules() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-semibold text-gray-900">Compliance Rules</h1>
-        <button className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+        <button 
+          onClick={() => navigate("/setup/compliance-rules/new")}
+          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
           <Plus size={18} />
           Add Rule
         </button>
@@ -153,7 +174,10 @@ export function ComplianceRules() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                   <div className="flex items-center justify-end gap-2">
-                    <button className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors">
+                    <button 
+                      onClick={() => navigate(`/setup/compliance-rules/${rule.id}`)}
+                      className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                    >
                       <Edit size={16} />
                     </button>
                     <button className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
