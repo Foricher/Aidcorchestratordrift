@@ -1,18 +1,11 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ArrowLeft, Plus, Trash2, Save } from "lucide-react";
-
-interface Substitute {
-  regex: string;
-  replace: string;
-}
-
-interface ComplianceRuleDef {
-  include_regex: string;
-  exclude_regex: string;
-  substitutes: Substitute[];
-  children: ComplianceRuleDef[];
-}
+import { ArrowLeft, Plus, Trash2, Save, Check, ChevronsUpDown, X } from "lucide-react";
+import { type ComplianceRuleDef, type Substitute } from "@/app/data/complianceRules";
+import { useComplianceRules } from "@/app/context/ComplianceRulesContext";
+import { Popover, PopoverTrigger, PopoverContent } from "@/app/components/ui/popover";
+import { Command, CommandInput, CommandList, CommandItem, CommandEmpty, CommandGroup } from "@/app/components/ui/command";
+import { Badge } from "@/app/components/ui/badge";
 
 interface ComplianceRule {
   id?: number;
@@ -26,14 +19,7 @@ interface ComplianceRule {
   };
 }
 
-// Mock playbooks from remediation page
-const availableScripts = [
-  "fix_password_complexity.yml",
-  "configure_snmpv3.yml",
-  "sync_ntp_servers.yml",
-  "enforce_ssh_v2.yml",
-  "configure_evpn_vxlan.yml",
-];
+import { mockPlaybooks } from "@/app/data/playbooks";
 
 // Component for editing a single rule definition
 function RuleDefEditor({ 
@@ -219,26 +205,33 @@ export function ComplianceRuleEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEditing = id !== "new";
+  const { rules, updateRule, addRule } = useComplianceRules();
 
-  const [rule, setRule] = useState<ComplianceRule>({
-    name: "",
-    severity: "low",
-    description: "",
-    platform: "AOSX",
-    compliance_rule_def: [
-      {
-        include_regex: "",
-        exclude_regex: "",
-        substitutes: [],
-        children: []
-      }
-    ],
-    remediation: {
-      scripts: []
+  const existingRule = isEditing ? rules.find((r) => r.id === Number(id)) : undefined;
+
+  const [rule, setRule] = useState<ComplianceRule>(
+    existingRule ?? {
+      name: "",
+      severity: "low",
+      description: "",
+      platform: "AOSX",
+      compliance_rule_def: [
+        {
+          include_regex: "",
+          exclude_regex: "",
+          substitutes: [],
+          children: [],
+        },
+      ],
+      remediation: {
+        scripts: [],
+      },
     }
-  });
+  );
 
-  const addRuleDef = () => {
+  const [scriptPopoverOpen, setScriptPopoverOpen] = useState(false);
+
+  const addRuleDef= () => {
     setRule({
       ...rule,
       compliance_rule_def: [
@@ -285,8 +278,11 @@ export function ComplianceRuleEdit() {
       alert("Rule name is mandatory");
       return;
     }
-    // Here you would save the rule
-    console.log("Saving rule:", rule);
+    if (isEditing && existingRule) {
+      updateRule({ ...existingRule, ...rule });
+    } else {
+      addRule({ ...rule, enabled: true, devices: 0 });
+    }
     navigate("/setup/compliance-rules");
   };
 
@@ -407,24 +403,61 @@ export function ComplianceRuleEdit() {
         <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Remediation Scripts</h2>
           <p className="text-sm text-gray-600 mb-4">
-            Select playbooks to run when this compliance rule detects a drift
+            Select scripts to run when this compliance rule detects a drift
           </p>
-          <div className="space-y-2">
-            {availableScripts.map((script) => (
-              <label
-                key={script}
-                className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+          <Popover open={scriptPopoverOpen} onOpenChange={setScriptPopoverOpen}>
+            <PopoverTrigger asChild>
+              <div
+                role="combobox"
+                aria-expanded={scriptPopoverOpen}
+                tabIndex={0}
+                className="min-h-10 w-full flex flex-wrap items-center gap-1.5 px-3 py-2 border border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                onClick={() => setScriptPopoverOpen(true)}
+                onKeyDown={(e) => e.key === "Enter" && setScriptPopoverOpen(true)}
               >
-                <input
-                  type="checkbox"
-                  className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
-                  checked={rule.remediation.scripts.includes(script)}
-                  onChange={() => toggleScript(script)}
-                />
-                <span className="text-sm font-mono text-gray-900">{script}</span>
-              </label>
-            ))}
-          </div>
+                {rule.remediation.scripts.length === 0 && (
+                  <span className="text-sm text-gray-400">Select scripts...</span>
+                )}
+                {rule.remediation.scripts.map((name) => (
+                  <Badge key={name} variant="secondary" className="font-mono text-xs flex items-center gap-1 pr-1">
+                    {name}
+                    <button
+                      type="button"
+                      className="rounded-full hover:bg-gray-300 p-0.5"
+                      onClick={(e) => { e.stopPropagation(); toggleScript(name); }}
+                    >
+                      <X size={11} />
+                    </button>
+                  </Badge>
+                ))}
+                <ChevronsUpDown size={16} className="ml-auto text-gray-400 shrink-0" />
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="p-0" align="start" style={{ width: "var(--radix-popover-trigger-width)" }}>
+              <Command>
+                <CommandInput placeholder="Search scripts..." />
+                <CommandList>
+                  <CommandEmpty>No scripts found.</CommandEmpty>
+                  <CommandGroup>
+                    {mockPlaybooks.map(({ name }) => (
+                      <CommandItem
+                        key={name}
+                        value={name}
+                        onSelect={() => toggleScript(name)}
+                        className="cursor-pointer"
+                      >
+                        <Check
+                          size={16}
+                          className={rule.remediation.scripts.includes(name) ? "opacity-100" : "opacity-0"}
+                        />
+                        <span className="font-mono">{name}</span>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* JSON Preview */}

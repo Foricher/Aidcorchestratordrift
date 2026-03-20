@@ -1,51 +1,6 @@
 import { useState } from "react";
 import { Plus, Search, Edit, Trash2, Save, X } from "lucide-react";
-
-interface Playbook {
-  id: number;
-  name: string;
-  description: string;
-  script: string;
-  order: number;
-}
-
-const mockPlaybooks: Playbook[] = [
-  {
-    id: 1,
-    name: "fix-password-complexity",
-    description: "Remediate password complexity issues by applying secure password policies",
-    script: "fix_password_complexity.yml",
-    order: 10
-  },
-  {
-    id: 2,
-    name: "configure-snmp-v3",
-    description: "Configure SNMP v3 with authentication and encryption",
-    script: "configure_snmpv3.yml",
-    order: 20
-  },
-  {
-    id: 3,
-    name: "sync-ntp-servers",
-    description: "Configure corporate NTP servers for time synchronization",
-    script: "sync_ntp_servers.yml",
-    order: 15
-  },
-  {
-    id: 4,
-    name: "enforce-ssh-v2",
-    description: "Enforce SSH version 2 and disable version 1",
-    script: "enforce_ssh_v2.yml",
-    order: 5
-  },
-  {
-    id: 5,
-    name: "configure-evpn-vxlan",
-    description: "Configure EVPN-VXLAN overlay network for data center fabric",
-    script: "configure_evpn_vxlan.yml",
-    order: 30
-  },
-];
+import { mockPlaybooks, type Playbook } from "@/app/data/playbooks";
 
 export function DriftRemediation() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -129,7 +84,7 @@ export function DriftRemediation() {
         <div>
           <h1 className="text-3xl font-semibold text-gray-900">Drift Remediation</h1>
           <p className="text-sm text-gray-600 mt-1">
-            Manage Ansible playbooks for automated drift remediation
+            Manage Ansible playbooks scripts for drift remediation
           </p>
         </div>
         <button 
@@ -137,7 +92,7 @@ export function DriftRemediation() {
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
         >
           <Plus size={18} />
-          Add Playbook
+          Add Script
         </button>
       </div>
 
@@ -241,7 +196,7 @@ export function DriftRemediation() {
                 Description
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Script
+                Ansible Script
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Order

@@ -289,7 +289,7 @@ export function ComplianceStatus() {
                       </button>
                       <button 
                         className="flex items-center gap-1 px-2.5 py-1 bg-gray-50 text-gray-700 rounded hover:bg-gray-100 transition-colors text-xs font-medium border border-gray-200"
-                        title="View Details"
+                        title="Open SSH Terminal"
                       >
                         <Terminal size={12} />
                         SSH Terminal

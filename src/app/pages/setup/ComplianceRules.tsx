@@ -1,74 +1,7 @@
 import { useState } from "react";
 import { Plus, Search, Edit, Trash2, CheckCircle, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router";
-
-interface ComplianceRule {
-  id: number;
-  name: string;
-  description: string;
-  severity: "critical" | "high" | "medium" | "low";
-  enabled: boolean;
-  devices: number;
-}
-
-const mockRules: ComplianceRule[] = [
-  {
-    id: 1,
-    name: "Password Complexity",
-    description: "Ensure minimum password length and complexity requirements",
-    severity: "critical",
-    enabled: true,
-    devices: 24
-  },
-  {
-    id: 2,
-    name: "SNMP Configuration",
-    description: "Verify SNMP v3 is configured with proper authentication",
-    severity: "high",
-    enabled: true,
-    devices: 24
-  },
-  {
-    id: 3,
-    name: "NTP Server Sync",
-    description: "Check that devices are synchronized with corporate NTP servers",
-    severity: "medium",
-    enabled: true,
-    devices: 24
-  },
-  {
-    id: 4,
-    name: "SSH Version Check",
-    description: "Ensure SSH version 2 is enabled and version 1 is disabled",
-    severity: "critical",
-    enabled: true,
-    devices: 24
-  },
-  {
-    id: 5,
-    name: "BGP",
-    description: "Verify BGP routing protocol configuration",
-    severity: "critical",
-    enabled: true,
-    devices: 12
-  },
-  {
-    id: 6,
-    name: "OSPF",
-    description: "Ensure OSPF routing protocol is properly configured",
-    severity: "critical",
-    enabled: true,
-    devices: 10
-  },
-  {
-    id: 7,
-    name: "Banner Configuration",
-    description: "Verify login banners are configured",
-    severity: "low",
-    enabled: false,
-    devices: 0
-  },
-];
+import { useComplianceRules } from "@/app/context/ComplianceRulesContext";
 
 const severityColors = {
   critical: "bg-red-100 text-red-800",
@@ -80,8 +13,9 @@ const severityColors = {
 export function ComplianceRules() {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
+  const { rules } = useComplianceRules();
 
-  const filteredRules = mockRules.filter(rule =>
+  const filteredRules = rules.filter(rule =>
     rule.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     rule.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -122,6 +56,9 @@ export function ComplianceRules() {
                 Rule Name
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Platform
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Description
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -143,6 +80,9 @@ export function ComplianceRules() {
               <tr key={rule.id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-6 py-4">
                   <div className="text-sm font-medium text-gray-900">{rule.name}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-sm text-gray-600">{rule.platform}</div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="text-sm text-gray-600 max-w-md">{rule.description}</div>

@@ -6,6 +6,7 @@ interface Device {
   name: string;
   ipAddress: string;
   type: string;
+  platform: "AOS8" | "AOSX" | "Other";
   site: string;
   status: "active" | "inactive";
   lastCheck: string;
@@ -18,6 +19,7 @@ const mockDevices: Device[] = [
     name: "router-core-01", 
     ipAddress: "10.0.1.1", 
     type: "Router", 
+    platform: "AOSX",
     site: "Brest Lab", 
     status: "active", 
     lastCheck: "2 min ago",
@@ -28,6 +30,7 @@ const mockDevices: Device[] = [
     name: "switch-access-01", 
     ipAddress: "10.0.2.1", 
     type: "Switch", 
+    platform: "AOSX",
     site: "Brest Lab", 
     status: "active", 
     lastCheck: "5 min ago",
@@ -38,6 +41,7 @@ const mockDevices: Device[] = [
     name: "switch-access-02", 
     ipAddress: "10.0.2.2", 
     type: "Switch", 
+    platform: "AOS8",
     site: "Thousand Oaks", 
     status: "active", 
     lastCheck: "5 min ago",
@@ -48,6 +52,7 @@ const mockDevices: Device[] = [
     name: "firewall-01", 
     ipAddress: "10.0.3.1", 
     type: "Firewall", 
+    platform: "Other",
     site: "Brest Lab", 
     status: "active", 
     lastCheck: "1 min ago",
@@ -58,6 +63,7 @@ const mockDevices: Device[] = [
     name: "router-branch-01", 
     ipAddress: "10.1.1.1", 
     type: "Router", 
+    platform: "AOS8",
     site: "Thousand Oaks", 
     status: "inactive", 
     lastCheck: "2 hours ago",
@@ -112,6 +118,9 @@ export function Device() {
                 Type
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Platform
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Site
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -142,6 +151,9 @@ export function Device() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {device.type}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  {device.platform}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                   {device.site}
