@@ -1,0 +1,2031 @@
+! Interfaces:
+----------------------------------
+interfaces-ethernet port 1/1/10A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 2997 low_threshold 0
+}
+interfaces-ethernet port 1/1/11A
+{
+    flood-limit bcast rate mbps 1997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/12A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/13A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/14A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/15A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/16A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/17A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/18A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/19A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/1A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/20A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/21A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0fvf
+}
+interfaces-ethernet port 1/1/22A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/23A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/24A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/25A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/26A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/27A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/28A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/29A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/2A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/30A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/31A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/32A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/33A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/34A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/35A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/36A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/37A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/38A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/39A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/3A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/40A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/41A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/42A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/43A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/44A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/45A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/46A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/47A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/48A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/49A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/4A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/50A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/51A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/52A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/53A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/54A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/5A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/6A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/7A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/8A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 1/1/9A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/10A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/11A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/12A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/13A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/14A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/15A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/16A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/17A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/18A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/19A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/1A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/20A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/21A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/22A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/23A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/24A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/25A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/26A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/27A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/28A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/29A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/2A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/30A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/31A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/32A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/33A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/34A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/35A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/36A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/37A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/38A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/39A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/3A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/40A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/41A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/42A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/43A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/44A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/45A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/46A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/47A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/48A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/49A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/4A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/50A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/51A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/52A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/53A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/54A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/5A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/6A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/7A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/8A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+interfaces-ethernet port 2/1/9A
+{
+    flood-limit bcast rate mbps 997 low_threshold 0
+    flood-limit mcast rate mbps 997 low_threshold 0
+    flood-limit uucast rate mbps 997 low_threshold 0
+}
+
+! Link Aggregation:
+----------------------------------
+linkagg LACP 1
+{
+    hash SRC-DST-IP
+    port 1/1/1A
+    admin-state enable
+}
+linkagg STATIC 2
+{
+    description "mylinkagg"
+    hash SRC-DST-IP
+    admin-state enable
+}
+
+! VLAN:
+----------------------------------
+vlan 10
+{
+    description "myvlan"
+    tagged port 1/1/9A
+    admin-state enable
+}
+vlan 3001
+{
+    tagged linkagg 1
+    admin-state enable
+}
+vlan 71
+{
+    untagged port 1/1/9A
+    untagged port 2/1/20A
+    admin-state enable
+}
+
+! Spanning Tree:
+----------------------------------
+
+! Port Mirroring:
+----------------------------------
+port-mirroring 1
+{
+    source port 1/1/7A
+    {
+        admin-state enable
+        direction inout
+    }
+    admin-state disable
+}
+
+! Port Monitoring:
+----------------------------------
+
+! IP:
+----------------------------------
+tenancy default
+vrf create EMP tenancy default
+vrf create default tenancy default
+vrf create dhcp tenancy default
+vrf default
+{
+    ip
+    {
+        interface vl3001
+        {
+            device vlan 3001
+            forward
+            ipv4 address 10.10.10.2/24
+            ipv6 address 2001:0000:0000:0000:0000:0000:0000:0001/32
+            admin-state enable
+        }
+    }
+}
+vrf dhcp
+{
+    ip
+    {
+        interface dhcpclient
+        {
+            device dhcp-client 71
+            forward
+            admin-state enable
+        }
+    }
+}
+
+! Service:
+----------------------------------
+vrf EMP
+{
+    ip
+    {
+        service
+        {
+            https admin-state disable
+            ntp admin-state disable
+            radius admin-state disable
+            sftp admin-state enable
+            snmp admin-state disable
+            ssh admin-state enable
+        }
+    }
+}
+vrf default
+{
+    ip
+    {
+        service
+        {
+            ftp admin-state enable
+            http admin-state enable
+            ntp admin-state disable
+            radius admin-state disable
+            snmp admin-state disable
+            ssh admin-state disable
+        }
+    }
+}
+vrf dhcp
+{
+    ip
+    {
+        service
+        {
+            ssh admin-state disable
+        }
+    }
+}
+
+! SFLOW:
+----------------------------------
+
+! AAA:
+----------------------------------
+aaa password-policy
+{
+    cannot-contain-username true
+    consecutive-character-exclusion 0
+    history 4
+    minimum-age 0
+    minimum-digit 1
+    minimum-lowercase 1
+    minimum-nonalpha 1
+    minimum-size 8
+    minimum-uppercase 1
+    password-expiration 0
+}
+aaa priv-level 1
+{
+    read-only all
+    read-write none
+}
+aaa priv-level 10
+{
+    read-only all
+    read-write aaa vlan ip linkagg interfaces chassisSystemInfo swlog showTech acl stp
+}
+aaa priv-level 15
+{
+    read-only all
+    read-write all
+}
+aaa role network-admin
+{
+    priv-level 10
+}
+aaa role network-operator
+{
+    priv-level 1
+}
+aaa role system-admin
+{
+    priv-level 15
+}
+aaa user admin encrypted-password vgdK/AIwSu4eAex6e/WA4A==
+{
+    password-expiration 0
+    role system-admin
+}
+aaa user local_user encrypted-password 4m7yEadGl+UOUaFW6AOpmg==
+{
+    no lock
+    password-expiration 0
+    role network-operator
+    snmp-auth-protocol sha-256
+    snmp-privacy-protocol aes-256
+    snmp-security-level authNoPriv
+    snmp-version none
+}
+aaa user snmp_user encrypted-password 4m7yEadGl+UOUaFW6AOpmg==
+{
+    no lock
+    password-expiration 0
+    role network-operator
+    snmp-auth-protocol sha-256
+    snmp-privacy-protocol aes-256
+    snmp-security-level authPriv
+    snmp-version v3
+    snmp-encrypted-auth-password 2ot874KZUM9TBCwalWJTPHxydwobX0HujTsMJWe8wXhl3nzsqja78sB6RaOzbiEvCYiU2KUlqcN3UTFgbJcDRkqlgZVvmXe5oDKkSh3NDKk=
+    snmp-encrypted-privacy-password 2ot874KZUM9TBCwalWJTPHxydwobX0HujTsMJWe8wXhl3nzsqja78sB6RaOzbiEvCYiU2KUlqcN3UTFgbJcDRkqlgZVvmXe5oDKkSh3NDKk=
+}
+aaa user-lockout
+{
+    duration 0
+    threshold 0
+    window 0
+}
+aaa radius-server rad1 hostname 1.2.3.4 encrypted-secret 1hK5WGflXKvu6mC9OpaNoQ==
+{
+    retries 3
+    timeout 2
+    tls
+    vrf EMP
+    source-ip 10.10.10.2
+}
+aaa tacacs-server tac1 hostname 1.2.3.4 encrypted-secret B12oDKqIHbEw47PO5XaMnQ==
+{
+    timeout 3
+}
+aaa authentication
+{
+    no failthrough
+    login local
+}
+aaa accounting
+{
+    command local
+}
+aaa authorization
+{
+    command local
+}
+
+! NTP:
+----------------------------------
+
+! SSH:
+----------------------------------
+ssh-server
+{
+    no enforce-pubkey-auth
+    login-grace-time 120
+    strong-ciphers true
+    strong-hmacs true
+    port 22
+    log-level info
+    admin-status enable
+}
+
+! Access List:
+----------------------------------
+access-list apply
+
+! QOS:
+----------------------------------
+
+! ERP:
+----------------------------------
+
+! MVRP:
+----------------------------------
+mvrp port 1/1/1A
+{
+    timer leaveall 100000
+    timer leave 1800
+    timer join 600
+    timer periodic-timer 1
+    static-vlan-restrict 22
+    restrict-vlan-advertisement 22
+    restrict-vlan-advertisement 23
+    restrict-vlan-registration 24
+}
+mvrp linkagg 2
+{
+    admin-state enable
+    timer leaveall 30000
+    timer leave 1800
+    timer join 600
+    timer periodic-timer 1
+}
+
+! LLDP:
+----------------------------------
+
+! Session:
+----------------------------------
+session settings
+{
+    banner-file none
+    cli-timeout 30
+    session-limit 0
+    prompt aosx
+    webview-session-limit 32
+    webview-timeout 480
+    tacacs-reauthentication 5
+    no command-log
+}
+
+! Health:
+----------------------------------
+
+! System:
+----------------------------------
+
+! Autotech:
+----------------------------------
+autotech global
+{
+    available_mem_threshold 10.0
+    global-state enabled
+    max_core_limit 5.0
+    max_techsupport_limit 10.0
+    min_available_mem 200
+    rate_limit_interval 180
+    since 2 days ago
+}
+autotech feature aos-ag
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-ipms
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-l2
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-l2-adv
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-l3-ip-infra
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-l3-rtg
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-ntp
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-system
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature aos-tcam
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature database
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature mgmt-framework
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature pmon
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature swss
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+autotech feature syncd
+{
+    available_mem_threshold 10.0
+    feature-state enabled
+    rate_limit_interval 600
+}
+
+! SNMP:
+----------------------------------
+
+! BFD:
+----------------------------------
+
+! VRRP:
+----------------------------------
+vrf default
+{
+    ip
+    {
+        vrrp
+        {
+            ipv4
+            {
+                virtual-router 1 interface vl3001
+                {
+                    accept false
+                    address 10.10.10.254
+                    version v2
+                    interval 100
+                    preempt
+                    priority 100
+                    admin-state enable
+                }
+            }
+            ipv6
+            {
+                virtual-router 1 interface vl3001
+                {
+                    accept false
+                    address 2001::254
+                    interval 10
+                    preempt
+                    priority 100
+                    admin-state enable
+                }
+            }
+        }
+    }
+}
+
+! SWLOG:
+----------------------------------
+swlog global
+{
+    console-level 1
+    duplicate-detect
+    flash-file-size 1250
+    preamble
+    size-trap-threshold 90
+    syslog-facility-id 16
+    admin_state true
+}
+swlog output
+{
+    console
+    no flash
+    tty
+}
+swlog socket host 1/1/1A port 514
+{
+    vrf default
+    no remote-command-log
+    no tls
+    admin-status false
+}
+swlog application SAI_API_ACL
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_BFD
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_BMTOR
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_BRIDGE
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_BUFFER
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_COUNTER
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_DEBUG_COUNTER
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_DTEL
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_FDB
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_HASH
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_HOSTIF
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_IPMC
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_IPMC_GROUP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_IPSEC
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_ISOLATION_GROUP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_L2MC
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_L2MC_GROUP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_LAG
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_MACSEC
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_MCAST_FDB
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_MIRROR
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_MPLS
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_MY_MAC
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_NAT
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_NEIGHBOR
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_NEXT_HOP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_NEXT_HOP_GROUP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_POLICER
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_PORT
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_QOS_MAP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_QUEUE
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_ROUTE
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_ROUTER_INTERFACE
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_RPF_GROUP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_SAMPLEPACKET
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_SCHEDULER
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_SCHEDULER_GROUP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_SRV6
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_STP
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_SWITCH
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_SYSTEM_PORT
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_TAM
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_TUNNEL
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_UDF
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_VFL
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_VIRTUAL_ROUTER
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_VLAN
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application SAI_API_WRED
+{
+    subapp all SAI_LOG_LEVEL_NOTICE
+}
+swlog application ale-aaa
+{
+    subapp all DEBUG
+}
+swlog application ale-eventd
+{
+    subapp all DEBUG
+}
+swlog application ale-fdbmgrd
+{
+    subapp all NOTICE
+    subapp major NOTICE
+    subapp tevent NOTICE
+    subapp texcept NOTICE
+    subapp tfunction ERROR
+}
+swlog application ale-fwd
+{
+    subapp all NOTICE
+}
+swlog application ale-lmd
+{
+    subapp all NOTICE
+}
+swlog application ale-qosmgrd
+{
+    subapp all NOTICE
+}
+swlog application ale-scd
+{
+    subapp all NOTICE
+}
+swlog application ale-swlog
+{
+    subapp all NOTICE
+}
+swlog application ale-tcammgrd
+{
+    subapp all NOTICE
+    subapp acldbg NOTICE
+    subapp aclgroup ERROR
+    subapp aclrsrc ERROR
+    subapp aclrule ERROR
+}
+swlog application ale-vlanmgrd
+{
+    subapp all NOTICE
+    subapp generalsub NOTICE
+    subapp major NOTICE
+    subapp vlansub NOTICE
+    subapp vpasub NOTICE
+}
+swlog application aleAgD
+{
+    subapp all NOTICE
+    subapp ag_general NOTICE
+    subapp ag_lps NOTICE
+    subapp main NOTICE
+    subapp pkt_proc NOTICE
+}
+swlog application aleAgMgr
+{
+    subapp all NOTICE
+    subapp ag_general NOTICE
+    subapp ag_lps NOTICE
+    subapp l2_eng NOTICE
+    subapp main NOTICE
+    subapp pkt_proc NOTICE
+    subapp vm_event NOTICE
+}
+swlog application aos-LacpMgrd
+{
+    subapp all NOTICE
+}
+swlog application aos-lagmgrd
+{
+    subapp all NOTICE
+}
+swlog application bfd
+{
+    subapp all NOTICE
+    subapp config NOTICE
+    subapp init NOTICE
+    subapp ipc NOTICE
+    subapp localDb NOTICE
+    subapp state NOTICE
+}
+swlog application bfdni
+{
+    subapp all NOTICE
+    subapp init NOTICE
+    subapp ipc NOTICE
+    subapp localDb NOTICE
+    subapp proto NOTICE
+}
+swlog application buffermgrd
+{
+    subapp all NOTICE
+}
+swlog application capman
+{
+    subapp all NOTICE
+}
+swlog application coppmgrd
+{
+    subapp all NOTICE
+}
+swlog application dhcp
+{
+    subapp all NOTICE
+}
+swlog application dumppublisher
+{
+    subapp all NOTICE
+}
+swlog application erpd
+{
+    subapp all NOTICE
+}
+swlog application erpmgr
+{
+    subapp all NOTICE
+}
+swlog application fdbsyncd
+{
+    subapp all NOTICE
+}
+swlog application gearsyncd
+{
+    subapp all NOTICE
+}
+swlog application intfmgrd
+{
+    subapp all NOTICE
+}
+swlog application ip6nid
+{
+    subapp all NOTICE
+}
+swlog application ipcmm
+{
+    subapp all NOTICE
+}
+swlog application ipcmmpkt
+{
+    subapp all NOTICE
+}
+swlog application ipni
+{
+    subapp all NOTICE
+}
+swlog application iprm
+{
+    subapp all NOTICE
+}
+swlog application ipserviced
+{
+    subapp all NOTICE
+    subapp accessfunc NOTICE
+    subapp itfchann NOTICE
+    subapp srcipv4 NOTICE
+    subapp srcipv6 NOTICE
+}
+swlog application isisVc
+{
+    subapp all NOTICE
+    subapp adj NOTICE
+    subapp circ NOTICE
+    subapp flddet NOTICE
+    subapp flood NOTICE
+    subapp init NOTICE
+    subapp ipc NOTICE
+    subapp leak NOTICE
+    subapp lsp NOTICE
+    subapp mip NOTICE
+    subapp misc NOTICE
+    subapp msg NOTICE
+    subapp ni NOTICE
+    subapp pkt NOTICE
+    subapp pktdet NOTICE
+    subapp red NOTICE
+    subapp restart NOTICE
+    subapp rtm NOTICE
+    subapp spf NOTICE
+    subapp spfdet NOTICE
+    subapp spfmon NOTICE
+    subapp summ NOTICE
+    subapp te NOTICE
+    subapp timr NOTICE
+    subapp vcprot NOTICE
+}
+swlog application lbdd
+{
+    subapp all NOTICE
+}
+swlog application lbdmgr
+{
+    subapp all NOTICE
+}
+swlog application linkmgr
+{
+    subapp all NOTICE
+    subapp linkmgr NOTICE
+    subapp wtrsTimer NOTICE
+}
+swlog application lldpd
+{
+    subapp all NOTICE
+    subapp general NOTICE
+    subapp rx_path NOTICE
+    subapp set_path NOTICE
+    subapp tx_path NOTICE
+}
+swlog application lldpmgr
+{
+    subapp all NOTICE
+    subapp general NOTICE
+    subapp rx_path NOTICE
+    subapp set_path NOTICE
+    subapp tx_path NOTICE
+}
+swlog application nbrmgrd
+{
+    subapp all NOTICE
+}
+swlog application neighsyncd
+{
+    subapp all NOTICE
+}
+swlog application orchagent
+{
+    subapp all NOTICE
+    subapp AclOrch ERROR
+    subapp AgOrch ERROR
+    subapp BfdOrch ERROR
+    subapp BufferOrch ERROR
+    subapp ChassisOrch ERROR
+    subapp CoppOrch ERROR
+    subapp CountOrch ERROR
+    subapp CrmOrch ERROR
+    subapp DtelOrch ERROR
+    subapp EcmOrch ERROR
+    subapp FabricOrch ERROR
+    subapp FdbOrch ERROR
+    subapp FgnhgOrch ERROR
+    subapp IntfOrch ERROR
+    subapp IpmsOrch ERROR
+    subapp IsolateGrpOrch ERROR
+    subapp L3Orch ERROR
+    subapp LagOrch ERROR
+    subapp MacSecOrch ERROR
+    subapp Main ERROR
+    subapp MirrorOrch ERROR
+    subapp MuxOrch ERROR
+    subapp NatOrch ERROR
+    subapp NhgOrch ERROR
+    subapp PbhOrch ERROR
+    subapp PfcOrch ERROR
+    subapp PmmOrch ERROR
+    subapp PolicerOrch ERROR
+    subapp PortOrch ERROR
+    subapp QosOrch ERROR
+    subapp RouteOrch ERROR
+    subapp SAIAOS_META ERROR
+    subapp SflowOrch ERROR
+    subapp SrvOrch ERROR
+    subapp StpOrch ERROR
+    subapp SwitchOrch ERROR
+    subapp TunnelOrch ERROR
+    subapp VcmOrch ERROR
+    subapp VnetOrch ERROR
+    subapp VrfOrch ERROR
+    subapp VxlOrch ERROR
+    subapp WatermarkOrch ERROR
+    subapp classify ERROR
+    subapp linkmgr NOTICE
+    subapp wtrsTimer NOTICE
+}
+swlog application ospfv2
+{
+    subapp all NOTICE
+}
+swlog application portsyncd
+{
+    subapp all NOTICE
+    subapp esm_cfg NOTICE
+    subapp esm_db NOTICE
+    subapp esm_ddm NOTICE
+    subapp esm_notify NOTICE
+    subapp esm_xcvr NOTICE
+}
+swlog application psmd
+{
+    subapp all NOTICE
+}
+swlog application rest-server
+{
+    subapp all NOTICE
+    subapp aaa DEBUG
+    subapp cvl NOTICE
+    subapp translib NOTICE
+}
+swlog application staticd
+{
+    subapp all NOTICE
+}
+swlog application stpd
+{
+    subapp all NOTICE
+    subapp age NOTICE
+    subapp bin NOTICE
+    subapp bout NOTICE
+    subapp brgd NOTICE
+    subapp brm NOTICE
+    subapp cti NOTICE
+    subapp dbgd NOTICE
+    subapp eni NOTICE
+    subapp fsm_sm NOTICE
+    subapp gmb NOTICE
+    subapp ipm NOTICE
+    subapp ipr NOTICE
+    subapp krb NOTICE
+    subapp krn NOTICE
+    subapp laggd NOTICE
+    subapp lpgd NOTICE
+    subapp mirrd NOTICE
+    subapp mvrpd NOTICE
+    subapp pim_sm NOTICE
+    subapp pmg NOTICE
+    subapp ppm_sm NOTICE
+    subapp prs_sm NOTICE
+    subapp prt_sm NOTICE
+    subapp prx_sm NOTICE
+    subapp pst_sm NOTICE
+    subapp pti_sm NOTICE
+    subapp ptx_sm NOTICE
+    subapp sok NOTICE
+    subapp stg NOTICE
+    subapp stpdgen NOTICE
+    subapp stpdi NOTICE
+    subapp stpdm NOTICE
+    subapp tch NOTICE
+    subapp tcm_sm NOTICE
+    subapp tcn NOTICE
+    subapp tcrx NOTICE
+    subapp vland NOTICE
+    subapp vpad NOTICE
+}
+swlog application stpmgrd
+{
+    subapp all NOTICE
+    subapp brg NOTICE
+    subapp dbg NOTICE
+    subapp initm NOTICE
+    subapp ipcm NOTICE
+    subapp lagg NOTICE
+    subapp lpg NOTICE
+    subapp mirr NOTICE
+    subapp mst NOTICE
+    subapp msti NOTICE
+    subapp mvrp NOTICE
+    subapp psub NOTICE
+    subapp pud NOTICE
+    subapp stpi NOTICE
+    subapp stpm NOTICE
+    subapp stpmgen NOTICE
+    subapp sud NOTICE
+    subapp trap NOTICE
+    subapp vcm NOTICE
+    subapp vlan NOTICE
+    subapp vpa NOTICE
+}
+swlog application syncd
+{
+    subapp all NOTICE
+    subapp SAIAOS_ACL ERROR
+    subapp SAIAOS_BRIDGE ERROR
+    subapp SAIAOS_BUFFER ERROR
+    subapp SAIAOS_COUNTER ERROR
+    subapp SAIAOS_DB ERROR
+    subapp SAIAOS_FDB ERROR
+    subapp SAIAOS_HASH ERROR
+    subapp SAIAOS_HOST_INTERFACE ERROR
+    subapp SAIAOS_L2MC_GROUP ERROR
+    subapp SAIAOS_LAG ERROR
+    subapp SAIAOS_MACSEC ERROR
+    subapp SAIAOS_MIRROR ERROR
+    subapp SAIAOS_NEIGHBOUR ERROR
+    subapp SAIAOS_NEXTHOP ERROR
+    subapp SAIAOS_PMM ERROR
+    subapp SAIAOS_POLICER ERROR
+    subapp SAIAOS_PORT ERROR
+    subapp SAIAOS_QOS ERROR
+    subapp SAIAOS_QUEUE ERROR
+    subapp SAIAOS_RID ERROR
+    subapp SAIAOS_RIF ERROR
+    subapp SAIAOS_ROUTE ERROR
+    subapp SAIAOS_SCHDULER ERROR
+    subapp SAIAOS_STP ERROR
+    subapp SAIAOS_SWITCH ERROR
+    subapp SAIAOS_UTIL ERROR
+    subapp SAIAOS_VCM ERROR
+    subapp SAIAOS_VLAN ERROR
+}
+swlog application tunnelmgrd
+{
+    subapp all NOTICE
+}
+swlog application udldd
+{
+    subapp all NOTICE
+    subapp general NOTICE
+    subapp rx_path NOTICE
+    subapp set_path NOTICE
+    subapp tx_path NOTICE
+}
+swlog application udldmgr
+{
+    subapp all NOTICE
+    subapp general NOTICE
+    subapp rx_path NOTICE
+    subapp set_path NOTICE
+    subapp tx_path NOTICE
+}
+swlog application vcLagd
+{
+    subapp all NOTICE
+    subapp general NOTICE
+}
+swlog application vcmCmm
+{
+    subapp all NOTICE
+    subapp auto_vfl NOTICE
+    subapp cap_mgr NOTICE
+    subapp cfg_flow NOTICE
+    subapp cfg_state NOTICE
+    subapp chas_sup NOTICE
+    subapp config NOTICE
+    subapp consist NOTICE
+    subapp environm NOTICE
+    subapp esm_drv NOTICE
+    subapp except NOTICE
+    subapp init NOTICE
+    subapp ipc NOTICE
+    subapp link_agg NOTICE
+    subapp mip NOTICE
+    subapp node_sync NOTICE
+    subapp port_ctrl NOTICE
+    subapp port_lib NOTICE
+    subapp port_mgr NOTICE
+    subapp protocol NOTICE
+    subapp regist NOTICE
+    subapp sln NOTICE
+    subapp stackport_vfl NOTICE
+    subapp stat_flow NOTICE
+    subapp stp NOTICE
+    subapp upgrade NOTICE
+    subapp vfc NOTICE
+    subapp vfl NOTICE
+    subapp vlan_mgr NOTICE
+}
+swlog application vcmNi
+{
+    subapp all NOTICE
+    subapp auto_vfl NOTICE
+    subapp bcm NOTICE
+    subapp cap_mgr NOTICE
+    subapp cfg_flow NOTICE
+    subapp cfg_state NOTICE
+    subapp chas_sup NOTICE
+    subapp config NOTICE
+    subapp consist NOTICE
+    subapp environm NOTICE
+    subapp esm_drv NOTICE
+    subapp except NOTICE
+    subapp fsm NOTICE
+    subapp hal NOTICE
+    subapp init NOTICE
+    subapp ipc NOTICE
+    subapp isis NOTICE
+    subapp link_agg NOTICE
+    subapp mip NOTICE
+    subapp node_sync NOTICE
+    subapp port_ctrl NOTICE
+    subapp port_lib NOTICE
+    subapp port_mgr NOTICE
+    subapp protocol NOTICE
+    subapp regist NOTICE
+    subapp sln NOTICE
+    subapp stackport_vfl NOTICE
+    subapp stat_flow NOTICE
+    subapp stp NOTICE
+    subapp thread NOTICE
+    subapp upgrade NOTICE
+    subapp vfl NOTICE
+    subapp vlan_mgr NOTICE
+}
+swlog application vrfmgrd
+{
+    subapp all NOTICE
+}
+swlog application vrrp
+{
+    subapp all ERROR
+    subapp config ERROR
+    subapp init ERROR
+    subapp ipc ERROR
+    subapp localDb ERROR
+    subapp proto ERROR
+    subapp sock ERROR
+    subapp state DEBUG
+}
+swlog application vxlanmgrd
+{
+    subapp all NOTICE
+}
+
+! Flex Counters:
+----------------------------------
+counters PORT
+{
+    state enable
+}
+counters RIF
+{
+    state enable
+}
+
+! Link Fault Propagation:
+----------------------------------
+link-fault-propagation group 1A
+{
+    admin-status enable
+    source 1/1/1A
+    wait-to-shutdown 0
+}
+
+! Loopback-Detection:
+----------------------------------
+loopback-detection global-config
+{
+    admin-state enable
+    autotecovery-timer 300
+    remote-origin disable
+    transmission-timer 30
+}
+
+! Macsec Profile:
+----------------------------------
+
+! fdb
+----------------------------------
+fdb global
+{
+    mac-aging-time 12
+}
+fdb port 1/1/1A
+{
+    learning-disable
+}
+fdb linkagg 2
+{
+    learning-disable
+}
+fdb vlan 1
+{
+    learning-disable
+}
+
+! Dhcp Server:
+----------------------------------
+! DHCP Server configuration is file based and stored under /flash/system/dhcp
+! Please refere to .conf files within this directory
+
+! Dhcp Relay:
+----------------------------------
+vrf default
+{
+    ip
+    {
+        ipv4
+        {
+            dhcp-relay
+            {
+                admin-state enable
+                agent-info
+                {
+                    format
+                    {
+                        user-string FormatUserString
+                        ascii circuit-id
+                        {
+                            base-mac
+                            cvlan
+                            interface
+                            system-name
+                            vlan
+                            user-string AsciiUserString
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+! Staticd
+----------------------------------
+vrf default
+{
+    ip
+    {
+        ipv4
+        {
+            static-route 59.46.65.26/24 gateway 1.2.3.4 metric 1 route-pref static1 tag 5
+        }
+    }
+}
+vrf pko
+{
+    ip
+    {
+        ipv4
+        {
+            static-route 1.2.3.0/24 follows 4.3.2.1 metric 5 route-pref static3 name "tutu"
+        }
+        ipv6
+        {
+            static-route 0001:0000:0000:0000:0000:0000:0000:0000/16 gateway 0002:0000:0000:0000:0000:0000:0000:0001 metric 1 route-pref static1 bfd tag 5 name "toto"
+        }
+    }
+}
+
+! OSPF:
+----------------------------------
+vrf default
+{
+    ip
+    {
+        ipv4
+        {
+            ospf
+            {
+                admin-state disable
+                spf-timer hold 13 delay 8
+                restart-helper no strict-lsa-checking
+                no restart-helper
+                restart-interval 133
+                route-tag 50
+                mtu-checking
+                opaque-lsas-supported
+                asbr-originate-default always metric 19 metric-type type1
+                log
+                {
+                    section main level info_
+                    section recv level warn
+                    section send level info
+                    section area level info
+                    section intf level info
+                    section vrf level info
+                    section report level info
+                    section lsa level info
+                    section info level error
+                    section nbr level info
+                    section summary level info
+                    section rdb level info
+                    section spf level info
+                    section err level info
+                    section state level info
+                    section bfd level info
+                    section gr level info
+                    section grhelp level info
+                    section flood level info
+                    section vlink level debug3
+                    section util level info
+                    section host level info
+                    section lsdb level info
+                    section ase level info
+                    section auth level info
+                    section redist level info
+                    section restart level info
+                    section dbexch level info
+                    section age level info
+                    section time level info
+                    section config level info
+                    section takeover level info
+                    section database level info
+                    section event level debug2
+                    section unit level info
+                    section hello level debug1
+                    section helper level info
+                    section statedb level info
+                    section iprm level info
+                }
+                area 0.0.0.0 type normal
+                {
+                    interface 1-1-3
+                    {
+                        bfd no drs-only
+                        no auth
+                        cost 6 priority 5 passive type nbma bfd hello-interval 12 retransmit-interval 20 dead-interval 49 transit-delay 6
+                        neighbor 100.110.111.123 priority 5 poll-interval 123
+                    }
+                }
+                area 0.0.0.131 type nssa default-metric 9
+                {
+                    summarize 10.1.0.0/16 filter
+                    summarize 10.10.1.0/24 metric 12
+                    virtual-link router 2.3.4.5
+                    {
+                        cost 5 hello-interval 12 retransmit-interval 9 dead-interval 49 transit-delay 4 auth chain 20
+                        bad command
+                    }
+                }
+            }
+        }
+    }
+}
+
