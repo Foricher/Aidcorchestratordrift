@@ -1,6 +1,7 @@
 import { useState, Fragment } from "react";
 import { Search, CheckCircle, XCircle, AlertTriangle, RefreshCw, CheckCheck, Terminal, ChevronDown } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
+import { Tooltip, TooltipTrigger, TooltipContent } from "../components/ui/tooltip";
 import referenceSnapshot from '../../../misc/aosx-reference-snapshot.txt?raw';
 import runningSnapshot from '../../../misc/aosx-running-snapshot.txt?raw';
 
@@ -77,6 +78,7 @@ const mockComplianceData: DeviceCompliance[] = [
 interface RuleDriftResult {
   ruleId: number;
   ruleName: string;
+  severity: "critical" | "high" | "medium" | "low";
   status: "compliant" | "drift";
   missingText: string;
   extraText: string;
@@ -84,32 +86,32 @@ interface RuleDriftResult {
 
 const deviceDriftResults: Record<number, RuleDriftResult[]> = {
   1: [
-    { ruleId: 1, ruleName: "Password Complexity", status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 2, ruleName: "SNMP Configuration",  status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 3, ruleName: "NTP Server Sync",      status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 4, ruleName: "SSH Version Check",    status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 2, ruleName: "SNMP Configuration",  severity: "high",     status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 3, ruleName: "NTP Server Sync",      severity: "medium",   status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 4, ruleName: "SSH Version Check",    severity: "critical", status: "compliant", missingText: "", extraText: "" },
   ],
   2: [
-    { ruleId: 1, ruleName: "Password Complexity", status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 2, ruleName: "SNMP Configuration",  status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 2, ruleName: "SNMP Configuration",  severity: "high",     status: "compliant", missingText: "", extraText: "" },
     {
-      ruleId: 3, ruleName: "NTP Server Sync", status: "drift",
+      ruleId: 3, ruleName: "NTP Server Sync", severity: "medium", status: "drift",
       missingText: `ntp server 10.0.0.1 prefer  [intent line 185]
 ntp server 10.0.0.2  [intent line 186]
 ntp authenticate  [intent line 187]`,
       extraText: "",
     },
-    { ruleId: 4, ruleName: "SSH Version Check", status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 4, ruleName: "SSH Version Check", severity: "critical", status: "compliant", missingText: "", extraText: "" },
   ],
   3: [
-    { ruleId: 1, ruleName: "Password Complexity", status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 2, ruleName: "SNMP Configuration",  status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 3, ruleName: "NTP Server Sync",      status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 4, ruleName: "SSH Version Check",    status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 2, ruleName: "SNMP Configuration",  severity: "high",     status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 3, ruleName: "NTP Server Sync",      severity: "medium",   status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 4, ruleName: "SSH Version Check",    severity: "critical", status: "compliant", missingText: "", extraText: "" },
   ],
   4: [
     {
-      ruleId: 1, ruleName: "Password Complexity", status: "drift",
+      ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "drift",
       missingText: `user-password-profile default  [intent line 44]
     min-length 8
     {
@@ -126,7 +128,7 @@ ntp authenticate  [intent line 187]`,
     }`,
     },
     {
-      ruleId: 2, ruleName: "SNMP Configuration", status: "drift",
+      ruleId: 2, ruleName: "SNMP Configuration", severity: "high", status: "drift",
       missingText: `snmp-server user snmpv3user  [intent line 112]
     auth sha auth-password $CREDENTIAL$
 snmp-server view all 1.3.6  [intent line 113]`,
@@ -134,8 +136,8 @@ snmp-server view all 1.3.6  [intent line 113]`,
 snmp-server community private rw  [running line 113]
 snmp-server enable traps  [running line 114]`,
     },
-    { ruleId: 3, ruleName: "NTP Server Sync",   status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 4, ruleName: "SSH Version Check", status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 3, ruleName: "NTP Server Sync",   severity: "medium",   status: "compliant", missingText: "", extraText: "" },
+    { ruleId: 4, ruleName: "SSH Version Check", severity: "critical", status: "compliant", missingText: "", extraText: "" },
   ],
   5: [],
 };
@@ -212,6 +214,19 @@ function DriftTab({ deviceId }: { deviceId: number }) {
               : "bg-gray-100 border-b border-gray-200"
           }`}>
             <span className="text-sm font-medium text-gray-800 flex-1">{rule.ruleName}</span>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span>
+                  {({
+                    critical: <span className="text-xs font-semibold text-red-700 bg-red-100 border border-red-200 rounded px-1.5 py-0.5 cursor-default">Critical</span>,
+                    high:     <span className="text-xs font-semibold text-orange-700 bg-orange-100 border border-orange-200 rounded px-1.5 py-0.5 cursor-default">High</span>,
+                    medium:   <span className="text-xs font-semibold text-yellow-700 bg-yellow-100 border border-yellow-200 rounded px-1.5 py-0.5 cursor-default">Medium</span>,
+                    low:      <span className="text-xs font-semibold text-blue-700 bg-blue-100 border border-blue-200 rounded px-1.5 py-0.5 cursor-default">Low</span>,
+                  } as Record<string, React.ReactNode>)[rule.severity]}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>Severity</TooltipContent>
+            </Tooltip>
             {rule.status === "compliant" ? (
               <span className="flex items-center gap-1 text-xs font-medium text-green-700 bg-green-100 border border-green-200 rounded-full px-2 py-0.5">
                 <CheckCircle size={11} /> Compliant
@@ -514,20 +529,20 @@ export function ComplianceStatus() {
                   {isExpanded && (
                     <tr className="bg-slate-50">
                       <td colSpan={8} className="px-0 py-0">
-                        <div className="p-4 border-t border-gray-200">
-                          <Tabs defaultValue="drift">
+                        <div className="px-8 py-4 border-t border-gray-200">
+                          <Tabs defaultValue="drift" className="px-8">
                             <TabsList className="mb-3">
                               <TabsTrigger value="drift">Drift</TabsTrigger>
                               <TabsTrigger value="intent">Intent Configuration</TabsTrigger>
                               <TabsTrigger value="running">Running Configuration</TabsTrigger>
                             </TabsList>
-                            <TabsContent value="drift" className="mt-0">
+                            <TabsContent value="drift" className="mt-0 px-8">
                               <DriftTab deviceId={device.id} />
                             </TabsContent>
-                            <TabsContent value="intent" className="mt-0">
+                            <TabsContent value="intent" className="mt-0 px-8">
                               <ConfigViewer text={referenceSnapshot} />
                             </TabsContent>
-                            <TabsContent value="running" className="mt-0">
+                            <TabsContent value="running" className="mt-0 px-8">
                               <ConfigViewer text={runningSnapshot} />
                             </TabsContent>
                           </Tabs>
