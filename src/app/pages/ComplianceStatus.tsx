@@ -2,6 +2,7 @@ import { useState, Fragment } from "react";
 import { Search, CheckCircle, XCircle, AlertTriangle, RefreshCw, CheckCheck, Terminal, ChevronDown } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../components/ui/tooltip";
+import { useSSHTerminal } from "../context/SSHTerminalContext";
 import referenceSnapshot from '../../../misc/aosx-reference-snapshot.txt?raw';
 import runningSnapshot from '../../../misc/aosx-running-snapshot.txt?raw';
 
@@ -283,6 +284,7 @@ export function ComplianceStatus() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  const { openSSHTerminal } = useSSHTerminal();
 
   const toggleRow = (id: number) => {
     setExpandedRows(prev => {
@@ -517,7 +519,8 @@ export function ComplianceStatus() {
                           Resolve
                         </button>
                         <button 
-                          className="flex items-center gap-1 px-2.5 py-1 bg-gray-50 text-gray-700 rounded hover:bg-gray-100 transition-colors text-xs font-medium border border-gray-200"
+                          onClick={() => openSSHTerminal(device.deviceName)}
+                          className="flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors text-xs font-medium border border-blue-200"
                           title="Open SSH Terminal"
                         >
                           <Terminal size={12} />

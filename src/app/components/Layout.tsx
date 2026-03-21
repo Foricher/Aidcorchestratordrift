@@ -1,17 +1,50 @@
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router";
-import { ChevronDown, ChevronRight, Menu, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Menu, X, Terminal as TerminalIcon } from "lucide-react";
+import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
+import { RightSidebar } from "./RightSidebar";
+import { SSHTerminalContext } from "../context/SSHTerminalContext";
+
+interface TerminalTab {
+  id: string;
+  name: string;
+}
 
 export function Layout() {
   const location = useLocation();
   const [setupOpen, setSetupOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
+
+  // Terminal state - persists when sidebar is toggled
+  const [terminalTabs, setTerminalTabs] = useState<TerminalTab[]>([]);
+  const [activeTerminalId, setActiveTerminalId] = useState<string>("");
+  const [showDeviceModal, setShowDeviceModal] = useState(false);
+
+  // Function to open SSH terminal for a specific device
+  const openSSHTerminal = (deviceName: string) => {
+    const newId = `terminal-${Date.now()}`;
+    setTerminalTabs([...terminalTabs, { id: newId, name: deviceName }]);
+    setActiveTerminalId(newId);
+    // Ensure sidebar is visible
+    setRightSidebarOpen(true);
+  };
 
   const isActive = (path: string) => location.pathname === path;
   const isSetupActive = location.pathname.startsWith("/setup");
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <SSHTerminalContext.Provider
+      value={{
+        tabs: terminalTabs,
+        activeTabId: activeTerminalId,
+        setTabs: setTerminalTabs,
+        setActiveTabId: setActiveTerminalId,
+        openSSHTerminal,
+        setShowDeviceModal,
+      }}
+    >
+      <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-blue-600 text-white shadow-md">
         <div className="flex items-center justify-between px-4 py-3">
@@ -26,7 +59,14 @@ export function Layout() {
               AI/DC Orchestrator
             </Link>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
+              className="p-1 hover:bg-blue-700 rounded transition-colors group"
+              title={rightSidebarOpen ? "Hide SSH Terminal" : "Show SSH Terminal"}
+            >
+              <TerminalIcon size={20} className="text-white group-hover:text-blue-100" />
+            </button>
             <span className="text-sm text-blue-100">Admin</span>
           </div>
         </div>
@@ -130,11 +170,41 @@ export function Layout() {
           </nav>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          <Outlet />
-        </main>
+        {/* Main Content Container with Resizable Panels */}
+        <PanelGroup direction="horizontal" className="flex-1">
+          <Panel defaultSize={65} minSize={30} className="flex">
+            {/* Main Content */}
+            <main className="flex-1 p-6 overflow-auto">
+              <Outlet />
+            </main>
+          </Panel>
+
+          {/* Resize Handle - only show when right sidebar is open */}
+          {rightSidebarOpen && (
+            <PanelResizeHandle className="w-1 bg-gray-300 hover:bg-blue-400 transition-colors cursor-col-resize" />
+          )}
+
+          {/* Right Sidebar with SSH Terminal - Always mounted to preserve xterm state */}
+          <Panel
+            defaultSize={35}
+            minSize={20}
+            maxSize={70}
+            className={`flex flex-col ${rightSidebarOpen ? "" : "hidden"}`}
+            style={{ display: rightSidebarOpen ? "flex" : "none" }}
+          >
+            <RightSidebar
+              isOpen={rightSidebarOpen}
+              tabs={terminalTabs}
+              setTabs={setTerminalTabs}
+              activeTabId={activeTerminalId}
+              setActiveTabId={setActiveTerminalId}
+              showDeviceModal={showDeviceModal}
+              setShowDeviceModal={setShowDeviceModal}
+            />
+          </Panel>
+        </PanelGroup>
       </div>
     </div>
+    </SSHTerminalContext.Provider>
   );
 }
