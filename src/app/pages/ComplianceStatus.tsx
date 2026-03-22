@@ -1,5 +1,5 @@
 import { useState, Fragment } from "react";
-import { Search, CheckCircle, XCircle, AlertTriangle, RefreshCw, CheckCheck, Terminal, ChevronDown } from "lucide-react";
+import { Search, CheckCircle, XCircle, AlertTriangle, RefreshCw, CheckCheck, Terminal, ChevronDown, Check, X } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../components/ui/tooltip";
 import { useSSHTerminal } from "../context/SSHTerminalContext";
@@ -191,7 +191,17 @@ function DriftLinesViewer({ text, type }: { text: string; type: "missing" | "ext
   );
 }
 
-function DriftTab({ deviceId }: { deviceId: number }) {
+function DriftTab({ 
+  deviceId, 
+  acceptedRules, 
+  onAcceptRule, 
+  onRejectRule 
+}: { 
+  deviceId: number;
+  acceptedRules: Record<number, Set<number>>;
+  onAcceptRule: (deviceId: number, ruleId: number) => void;
+  onRejectRule: (deviceId: number, ruleId: number) => void;
+}) {
   const results = deviceDriftResults[deviceId] ?? [];
   if (results.length === 0) {
     return (
@@ -206,15 +216,26 @@ function DriftTab({ deviceId }: { deviceId: number }) {
         <div
           key={rule.ruleId}
           className={`rounded-lg border ${
-            rule.status === "drift" ? "border-orange-300 bg-orange-50" : "border-gray-200 bg-gray-50"
+            rule.status === "drift" && !acceptedRules[deviceId]?.has(rule.ruleId)
+              ? "border-orange-300 bg-orange-50"
+              : rule.status === "drift" && acceptedRules[deviceId]?.has(rule.ruleId)
+              ? "border-green-300 bg-green-50"
+              : "border-gray-200 bg-gray-50"
           }`}
         >
           <div className={`flex items-center gap-2 px-4 py-2.5 rounded-t-lg ${
-            rule.status === "drift"
+            rule.status === "drift" && !acceptedRules[deviceId]?.has(rule.ruleId)
               ? "bg-orange-100 border-b border-orange-200"
+              : rule.status === "drift" && acceptedRules[deviceId]?.has(rule.ruleId)
+              ? "bg-green-100 border-b border-green-200"
               : "bg-gray-100 border-b border-gray-200"
           }`}>
             <span className="text-sm font-medium text-gray-800 flex-1">{rule.ruleName}</span>
+            {acceptedRules[deviceId]?.has(rule.ruleId) && (
+              <span className="flex items-center gap-1 text-xs font-medium text-blue-700 bg-blue-100 border border-blue-200 rounded-full px-2 py-0.5">
+                ✓ Accepted
+              </span>
+            )}
             <Tooltip>
               <TooltipTrigger asChild>
                 <span>
@@ -228,7 +249,7 @@ function DriftTab({ deviceId }: { deviceId: number }) {
               </TooltipTrigger>
               <TooltipContent>Severity</TooltipContent>
             </Tooltip>
-            {rule.status === "compliant" ? (
+            {rule.status === "compliant" || (acceptedRules[deviceId]?.has(rule.ruleId)) ? (
               <span className="flex items-center gap-1 text-xs font-medium text-green-700 bg-green-100 border border-green-200 rounded-full px-2 py-0.5">
                 <CheckCircle size={11} /> Compliant
               </span>
@@ -238,7 +259,7 @@ function DriftTab({ deviceId }: { deviceId: number }) {
               </span>
             )}
           </div>
-          {rule.status === "drift" && (
+          {rule.status === "drift" && !acceptedRules[deviceId]?.has(rule.ruleId) && (
             <div className="p-3 flex flex-col gap-2">
               {rule.missingText.trim() && (
                 <div className="flex flex-col gap-1">
@@ -252,6 +273,58 @@ function DriftTab({ deviceId }: { deviceId: number }) {
                   <DriftLinesViewer text={rule.extraText} type="extra" />
                 </div>
               )}
+              <div className="flex gap-2 pt-2 border-t border-orange-200">
+                <button
+                  onClick={() => onAcceptRule(deviceId, rule.ruleId)}
+                  className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-700 rounded hover:bg-green-100 transition-colors text-xs font-medium border border-green-200"
+                  title="Accept this drift"
+                >
+                  <Check size={12} />
+                  Accept
+                </button>
+                <button
+                  disabled
+                  className="flex items-center gap-1 px-3 py-1 bg-gray-50 text-gray-400 cursor-not-allowed rounded text-xs font-medium border border-gray-200"
+                  title="Reject (only available after accepting)"
+                >
+                  <X size={12} />
+                  Reject
+                </button>
+              </div>
+            </div>
+          )}
+          {rule.status === "drift" && acceptedRules[deviceId]?.has(rule.ruleId) && (
+            <div className="p-3 flex flex-col gap-2">
+              {rule.missingText.trim() && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-medium text-red-600">− Missing lines (in intent, absent from running)</span>
+                  <DriftLinesViewer text={rule.missingText} type="missing" />
+                </div>
+              )}
+              {rule.extraText.trim() && (
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-medium text-green-700">+ Extra lines (in running, absent from intent)</span>
+                  <DriftLinesViewer text={rule.extraText} type="extra" />
+                </div>
+              )}
+              <div className="flex gap-2 pt-2 border-t border-orange-200">
+                <button
+                  disabled
+                  className="flex items-center gap-1 px-3 py-1 bg-gray-50 text-gray-400 cursor-not-allowed rounded text-xs font-medium border border-gray-200"
+                  title="Already accepted"
+                >
+                  <Check size={12} />
+                  Accept
+                </button>
+                <button
+                  onClick={() => onRejectRule(deviceId, rule.ruleId)}
+                  className="flex items-center gap-1 px-3 py-1 bg-red-50 text-red-700 rounded hover:bg-red-100 transition-colors text-xs font-medium border border-red-200"
+                  title="Reject this accepted drift"
+                >
+                  <X size={12} />
+                  Reject
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -284,7 +357,26 @@ export function ComplianceStatus() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  const [acceptedRules, setAcceptedRules] = useState<Record<number, Set<number>>>({});
   const { openSSHTerminal } = useSSHTerminal();
+
+  const acceptRule = (deviceId: number, ruleId: number) => {
+    setAcceptedRules(prev => ({
+      ...prev,
+      [deviceId]: new Set([...(prev[deviceId] || []), ruleId])
+    }));
+  };
+
+  const rejectRule = (deviceId: number, ruleId: number) => {
+    setAcceptedRules(prev => {
+      const deviceRules = new Set(prev[deviceId] || []);
+      deviceRules.delete(ruleId);
+      return {
+        ...prev,
+        [deviceId]: deviceRules
+      };
+    });
+  };
 
   const toggleRow = (id: number) => {
     setExpandedRows(prev => {
@@ -297,12 +389,25 @@ export function ComplianceStatus() {
   const filteredData = mockComplianceData.filter(device => {
     const matchesSearch = device.deviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          device.ipAddress.includes(searchTerm);
-    const matchesStatus = statusFilter === "all" || device.status === statusFilter;
+    // Calculate actual device status for filtering
+    const acceptedRulesCount = acceptedRules[device.id] ? acceptedRules[device.id].size : 0;
+    const actualPassedRules = device.passedRules + acceptedRulesCount;
+    const actualDeviceStatus = actualPassedRules === device.totalRules ? "compliant" : 
+                             device.status === "error" ? "error" : "drift";
+    const matchesStatus = statusFilter === "all" || actualDeviceStatus === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const compliantCount = mockComplianceData.filter(d => d.status === "compliant").length;
-  const driftCount = mockComplianceData.filter(d => d.status === "drift").length;
+  const compliantCount = mockComplianceData.filter(d => {
+    const acceptedRulesCount = acceptedRules[d.id] ? acceptedRules[d.id].size : 0;
+    const actualPassedRules = d.passedRules + acceptedRulesCount;
+    return actualPassedRules === d.totalRules;
+  }).length;
+  const driftCount = mockComplianceData.filter(d => {
+    const acceptedRulesCount = acceptedRules[d.id] ? acceptedRules[d.id].size : 0;
+    const actualPassedRules = d.passedRules + acceptedRulesCount;
+    return actualPassedRules < d.totalRules && d.status !== "error";
+  }).length;
   const errorCount = mockComplianceData.filter(d => d.status === "error").length;
 
   return (
@@ -418,16 +523,19 @@ export function ComplianceStatus() {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Last Check
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {filteredData.map((device) => {
+              // Calculate actual passed rules including accepted rules
+              const acceptedRulesCount = acceptedRules[device.id] ? acceptedRules[device.id].size : 0;
+              const actualPassedRules = device.passedRules + acceptedRulesCount;
               const complianceRate = device.totalRules > 0 
-                ? Math.round((device.passedRules / device.totalRules) * 100) 
+                ? Math.round((actualPassedRules / device.totalRules) * 100) 
                 : 0;
+              // Calculate actual device status based on accepted rules
+              const actualDeviceStatus = actualPassedRules === device.totalRules ? "compliant" : 
+                                       device.status === "error" ? "error" : "drift";
               const isExpanded = expandedRows.has(device.id);
 
               return (
@@ -453,19 +561,19 @@ export function ComplianceStatus() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        {device.status === "compliant" && (
+                        {actualDeviceStatus === "compliant" && (
                           <>
                             <CheckCircle className="text-green-600" size={18} />
                             <span className="text-sm text-green-600 font-medium">Compliant</span>
                           </>
                         )}
-                        {device.status === "drift" && (
+                        {actualDeviceStatus === "drift" && (
                           <>
                             <AlertTriangle className="text-orange-600" size={18} />
                             <span className="text-sm text-orange-600 font-medium">Drift</span>
                           </>
                         )}
-                        {device.status === "error" && (
+                        {actualDeviceStatus === "error" && (
                           <>
                             <XCircle className="text-red-600" size={18} />
                             <span className="text-sm text-red-600 font-medium">Error</span>
@@ -490,49 +598,47 @@ export function ComplianceStatus() {
                           </div>
                         </div>
                         <span className="text-sm text-gray-600 whitespace-nowrap">
-                          {device.passedRules}/{device.totalRules}
+                          {actualPassedRules}/{device.totalRules}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
                       {device.lastCheck}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
-                      <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
-                        <button 
-                          className="flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors text-xs font-medium border border-blue-200"
-                          title="Check Drift"
-                        >
-                          <RefreshCw size={12} />
-                          Check
-                        </button>
-                        <button 
-                          disabled={device.status !== "drift"}
-                          className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors border ${
-                            device.status === "drift" 
-                              ? "bg-green-50 text-green-700 hover:bg-green-100 border-green-200" 
-                              : "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200"
-                          }`}
-                          title="Resolve Drift"
-                        >
-                          <CheckCheck size={12} />
-                          Resolve
-                        </button>
-                        <button 
-                          onClick={() => openSSHTerminal(device.deviceName)}
-                          className="flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors text-xs font-medium border border-blue-200"
-                          title="Open SSH Terminal"
-                        >
-                          <Terminal size={12} />
-                          SSH Terminal
-                        </button>
-                      </div>
-                    </td>
                   </tr>
                   {isExpanded && (
                     <tr className="bg-slate-50">
-                      <td colSpan={8} className="px-0 py-0">
+                      <td colSpan={7} className="px-0 py-0">
                         <div className="px-8 py-4 border-t border-gray-200">
+                          <div className="flex items-center justify-start gap-1.5 mb-4 pl-8">
+                            <button 
+                              className="flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors text-xs font-medium border border-blue-200"
+                              title="Check Drift"
+                            >
+                              <RefreshCw size={12} />
+                              Check
+                            </button>
+                            <button 
+                              disabled={device.status !== "drift"}
+                              className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors border ${
+                                device.status === "drift" 
+                                  ? "bg-green-50 text-green-700 hover:bg-green-100 border-green-200" 
+                                  : "bg-gray-50 text-gray-400 cursor-not-allowed border-gray-200"
+                              }`}
+                              title="Resolve Drift"
+                            >
+                              <CheckCheck size={12} />
+                              Resolve
+                            </button>
+                            <button 
+                              onClick={() => openSSHTerminal(device.deviceName)}
+                              className="flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors text-xs font-medium border border-blue-200"
+                              title="Open SSH Terminal"
+                            >
+                              <Terminal size={12} />
+                              SSH Terminal
+                            </button>
+                          </div>
                           <Tabs defaultValue="drift" className="px-8">
                             <TabsList className="mb-3">
                               <TabsTrigger value="drift">Drift</TabsTrigger>
@@ -540,7 +646,12 @@ export function ComplianceStatus() {
                               <TabsTrigger value="running">Running Configuration</TabsTrigger>
                             </TabsList>
                             <TabsContent value="drift" className="mt-0 px-8">
-                              <DriftTab deviceId={device.id} />
+                              <DriftTab 
+                                deviceId={device.id} 
+                                acceptedRules={acceptedRules}
+                                onAcceptRule={acceptRule}
+                                onRejectRule={rejectRule}
+                              />
                             </TabsContent>
                             <TabsContent value="intent" className="mt-0 px-8">
                               <ConfigViewer text={referenceSnapshot} />
