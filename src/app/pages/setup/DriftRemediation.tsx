@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Edit, Trash2, Save, X } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Save, X, Wrench } from "lucide-react";
 import { mockPlaybooks, type Playbook } from "@/app/data/playbooks";
 
 export function DriftRemediation() {
@@ -81,11 +81,14 @@ export function DriftRemediation() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Drift Remediation</h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Manage Ansible playbooks scripts for drift remediation
-          </p>
+        <div className="flex items-center gap-3">
+          <Wrench size={28} className="text-blue-600" />
+          <div>
+            <h1 className="text-3xl font-semibold text-gray-900">Drift Remediation</h1>
+            <p className="text-sm text-gray-600 mt-1">
+              Manage Ansible playbooks scripts for drift remediation
+            </p>
+          </div>
         </div>
         <button 
           onClick={handleAdd}

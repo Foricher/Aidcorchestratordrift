@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ArrowLeft, Plus, Trash2, Save, Check, ChevronsUpDown, X } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Save, Check, ChevronsUpDown, X, Shield } from "lucide-react";
 import { type ComplianceRuleDef, type Substitute } from "@/app/data/complianceRules";
 import { useComplianceRules } from "@/app/context/ComplianceRulesContext";
 import { Popover, PopoverTrigger, PopoverContent } from "@/app/components/ui/popover";
@@ -296,7 +296,8 @@ export function ComplianceRuleEdit() {
         >
           <ArrowLeft size={20} />
         </button>
-        <div className="flex-1">
+        <div className="flex-1 flex items-center gap-3">
+          <Shield size={28} className="text-blue-600" />
           <h1 className="text-3xl font-semibold text-gray-900">
             {isEditing ? "Edit Compliance Rule" : "Add Compliance Rule"}
           </h1>

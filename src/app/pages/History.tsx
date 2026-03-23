@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Search, Calendar, TrendingUp, TrendingDown, AlertCircle } from "lucide-react";
+import { Search, Calendar, TrendingUp, TrendingDown, AlertCircle, History as HistoryIcon } from "lucide-react";
 
 interface HistoryEvent {
   id: number;
@@ -115,7 +115,10 @@ export function History() {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold text-gray-900 mb-6">History</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <HistoryIcon size={28} className="text-blue-600" />
+        <h1 className="text-3xl font-semibold text-gray-900">History</h1>
+      </div>
 
       {/* Stats Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

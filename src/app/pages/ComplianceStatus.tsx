@@ -416,7 +416,10 @@ export function ComplianceStatus() {
 
   return (
     <div>
-      <h1 className="text-3xl font-semibold text-gray-900 mb-6">Compliance Status</h1>
+      <div className="flex items-center gap-3 mb-6">
+        <CheckCircle size={28} className="text-blue-600" />
+        <h1 className="text-3xl font-semibold text-gray-900">Compliance Status</h1>
+      </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

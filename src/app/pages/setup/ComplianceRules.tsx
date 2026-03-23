@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Search, Edit, Trash2, CheckCircle, AlertCircle } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CheckCircle, AlertCircle, Shield } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useComplianceRules } from "@/app/context/ComplianceRulesContext";
 
@@ -23,7 +23,10 @@ export function ComplianceRules() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-semibold text-gray-900">Compliance Rules</h1>
+        <div className="flex items-center gap-3">
+          <Shield size={28} className="text-blue-600" />
+          <h1 className="text-3xl font-semibold text-gray-900">Compliance Rules</h1>
+        </div>
         <button 
           onClick={() => navigate("/setup/compliance-rules/new")}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
