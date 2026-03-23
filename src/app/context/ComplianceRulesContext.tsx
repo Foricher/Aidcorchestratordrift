@@ -6,6 +6,7 @@ interface ComplianceRulesContextValue {
   updateRule: (updated: ComplianceRule) => void;
   addRule: (rule: Omit<ComplianceRule, "id">) => void;
   deleteRule: (id: number) => void;
+  removeRemediationScriptFromAllRules: (scriptName: string) => void;
 }
 
 const ComplianceRulesContext = createContext<ComplianceRulesContextValue | null>(null);
@@ -26,8 +27,19 @@ export function ComplianceRulesProvider({ children }: { children: ReactNode }) {
     setRules((prev) => prev.filter((r) => r.id !== id));
   };
 
+  const removeRemediationScriptFromAllRules = (scriptName: string) => {
+    setRules((prev) =>
+      prev.map((rule) => ({
+        ...rule,
+        remediation: {
+          scripts: rule.remediation.scripts.filter((script) => script !== scriptName),
+        },
+      }))
+    );
+  };
+
   return (
-    <ComplianceRulesContext.Provider value={{ rules, updateRule, addRule, deleteRule }}>
+    <ComplianceRulesContext.Provider value={{ rules, updateRule, addRule, deleteRule, removeRemediationScriptFromAllRules }}>
       {children}
     </ComplianceRulesContext.Provider>
   );

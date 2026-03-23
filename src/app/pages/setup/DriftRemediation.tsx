@@ -1,20 +1,38 @@
 import { useState } from "react";
-import { Plus, Search, Edit, Trash2, Save, X, Wrench } from "lucide-react";
-import { mockPlaybooks, type Playbook } from "@/app/data/playbooks";
+import { Plus, Search, Edit, Trash2, Save, X, Wrench, AlertTriangle } from "lucide-react";
+import { useRemediations } from "@/app/context/RemediationContext";
+import { useComplianceRules } from "@/app/context/ComplianceRulesContext";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 
 export function DriftRemediation() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [playbooks, setPlaybooks] = useState<Playbook[]>(mockPlaybooks);
   const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<Partial<Playbook>>({});
+  const [editForm, setEditForm] = useState<Partial<import("@/app/data/playbooks").Playbook>>({});
   const [isAdding, setIsAdding] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+
+  const { playbooks, addPlaybook, updatePlaybook, deletePlaybook } = useRemediations();
+  const { rules, removeRemediationScriptFromAllRules } = useComplianceRules();
+
+  const getRulesUsingPlaybook = (playbookName: string) => {
+    return rules.filter((rule) => rule.remediation.scripts.includes(playbookName));
+  };
+
+  const handleDeletePlaybook = (playbookId: number) => {
+    const playbook = playbooks.find((p) => p.id === playbookId);
+    if (!playbook) return;
+
+    removeRemediationScriptFromAllRules(playbook.name);
+    deletePlaybook(playbookId);
+    setDeleteConfirmId(null);
+  };
 
   const filteredPlaybooks = playbooks.filter(playbook =>
     playbook.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     playbook.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleEdit = (playbook: Playbook) => {
+  const handleEdit = (playbook: import("@/app/data/playbooks").Playbook) => {
     setEditingId(playbook.id);
     setEditForm(playbook);
     setIsAdding(false);
@@ -22,34 +40,36 @@ export function DriftRemediation() {
 
   const handleSave = () => {
     if (isAdding) {
-      // Validation pour l'ajout
       if (!editForm.name?.trim() || !editForm.script?.trim()) {
         alert("Name and Script are mandatory fields");
         return;
       }
       
-      const newPlaybook: Playbook = {
+      const newPlaybook: import("@/app/data/playbooks").Playbook = {
         id: Math.max(...playbooks.map(p => p.id), 0) + 1,
         name: editForm.name.trim(),
         description: editForm.description || "",
         script: editForm.script.trim(),
         order: editForm.order ?? 10
       };
-      setPlaybooks([...playbooks, newPlaybook]);
+      addPlaybook(newPlaybook);
       setIsAdding(false);
       setEditForm({});
     } else if (editingId) {
-      // Validation pour l'édition
       if (!editForm.name?.trim() || !editForm.script?.trim()) {
         alert("Name and Script are mandatory fields");
         return;
       }
 
-      setPlaybooks(playbooks.map(p => 
-        p.id === editingId 
-          ? { ...p, ...editForm, name: editForm.name!.trim(), script: editForm.script!.trim() } 
-          : p
-      ));
+      const existingPlaybook = playbooks.find((p) => p.id === editingId);
+      if (existingPlaybook) {
+        updatePlaybook({
+          ...existingPlaybook,
+          ...editForm,
+          name: editForm.name!.trim(),
+          script: editForm.script!.trim(),
+        });
+      }
       setEditingId(null);
       setEditForm({});
     }
@@ -59,12 +79,6 @@ export function DriftRemediation() {
     setEditingId(null);
     setIsAdding(false);
     setEditForm({});
-  };
-
-  const handleDelete = (id: number) => {
-    if (confirm("Are you sure you want to delete this playbook?")) {
-      setPlaybooks(playbooks.filter(p => p.id !== id));
-    }
   };
 
   const handleAdd = () => {
@@ -288,20 +302,28 @@ export function DriftRemediation() {
                     </div>
                   ) : (
                     <div className="flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => handleEdit(playbook)}
-                        className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
-                        title="Edit"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(playbook.id)}
-                        className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                        title="Delete"
-                      >
-                        <Trash2 size={16} />
-                      </button>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => handleEdit(playbook)}
+                            className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                          >
+                            <Edit size={16} />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>Edit Playbook</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={() => setDeleteConfirmId(playbook.id)}
+                            className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>Delete Playbook</TooltipContent>
+                      </Tooltip>
                     </div>
                   )}
                 </td>
@@ -310,6 +332,70 @@ export function DriftRemediation() {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId !== null && (() => {
+        const playbookToDelete = playbooks.find((p) => p.id === deleteConfirmId);
+        const rulesUsingPlaybook = playbookToDelete ? getRulesUsingPlaybook(playbookToDelete.name) : [];
+
+        return (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Delete Remediation Script</h2>
+              </div>
+
+              <div className="px-6 py-4">
+                <p className="text-sm text-gray-600 mb-4">
+                  Are you sure you want to delete <span className="font-medium">{playbookToDelete?.name}</span>? This action cannot be undone.
+                </p>
+
+                {rulesUsingPlaybook.length > 0 && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="text-amber-600 flex-shrink-0 mt-0.5" size={18} />
+                      <div>
+                        <p className="text-sm font-medium text-amber-900 mb-2">
+                          This script is used by {rulesUsingPlaybook.length} compliance rule{rulesUsingPlaybook.length !== 1 ? 's' : ''}
+                        </p>
+                        <ul className="text-xs text-amber-800 space-y-1">
+                          {rulesUsingPlaybook.map((rule) => (
+                            <li key={rule.id} className="flex items-center gap-2">
+                              <span className="text-amber-600">•</span>
+                              <span>
+                                {rule.name}
+                                <span className="ml-1 text-amber-700 font-medium">({rule.platform})</span>
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="text-xs text-amber-800 mt-2">
+                          The script will be removed from these compliance rules.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDeletePlaybook(deleteConfirmId)}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {filteredPlaybooks.length === 0 && (
         <div className="text-center py-12 bg-white rounded-lg shadow border border-gray-200">

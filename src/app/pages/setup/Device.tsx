@@ -4,78 +4,11 @@ import { mockRules } from "../../data/complianceRules";
 import { Badge } from "../../components/ui/badge";
 import { Popover, PopoverTrigger, PopoverContent } from "../../components/ui/popover";
 import { Command, CommandInput, CommandList, CommandItem, CommandEmpty, CommandGroup } from "../../components/ui/command";
-
-interface Device {
-  id: number;
-  name: string;
-  ipAddress: string;
-  type: string;
-  platform: "AOS8" | "AOSX" | "Other";
-  site: string;
-  status: "active" | "inactive";
-  lastCheck: string;
-  complianceRules: string[];
-}
-
-const mockDevices: Device[] = [
-  { 
-    id: 1, 
-    name: "router-core-01", 
-    ipAddress: "10.0.1.1", 
-    type: "Router", 
-    platform: "AOSX",
-    site: "Brest Lab", 
-    status: "active", 
-    lastCheck: "2 min ago",
-    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check", "BGP", "OSPF"]
-  },
-  { 
-    id: 2, 
-    name: "switch-access-01", 
-    ipAddress: "10.0.2.1", 
-    type: "Switch", 
-    platform: "AOSX",
-    site: "Brest Lab", 
-    status: "active", 
-    lastCheck: "5 min ago",
-    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check", "OSPF"]
-  },
-  { 
-    id: 3, 
-    name: "switch-access-02", 
-    ipAddress: "10.0.2.2", 
-    type: "Switch", 
-    platform: "AOS8",
-    site: "Thousand Oaks", 
-    status: "active", 
-    lastCheck: "5 min ago",
-    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check"]
-  },
-  { 
-    id: 4, 
-    name: "firewall-01", 
-    ipAddress: "10.0.3.1", 
-    type: "Firewall", 
-    platform: "Other",
-    site: "Brest Lab", 
-    status: "active", 
-    lastCheck: "1 min ago",
-    complianceRules: ["Password Complexity", "SNMP Configuration", "NTP Server Sync", "SSH Version Check"]
-  },
-  { 
-    id: 5, 
-    name: "router-branch-01", 
-    ipAddress: "10.1.1.1", 
-    type: "Router", 
-    platform: "AOS8",
-    site: "Thousand Oaks", 
-    status: "inactive", 
-    lastCheck: "2 hours ago",
-    complianceRules: ["Password Complexity", "NTP Server Sync", "BGP"]
-  },
-];
+import { Tooltip, TooltipTrigger, TooltipContent } from "../../components/ui/tooltip";
+import { useDevices, type Device } from "../../context/DeviceContext";
 
 export function Device() {
+  const { devices, addDevice, updateDevice, deleteDevice } = useDevices();
   const getAvailableComplianceRules = (platform: Device["platform"]): string[] =>
     Array.from(
       new Set<string>(
@@ -86,10 +19,10 @@ export function Device() {
     ).sort((a, b) => a.localeCompare(b));
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [devices, setDevices] = useState<Device[]>(mockDevices);
   const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false);
   const [complianceRulesPopoverOpen, setComplianceRulesPopoverOpen] = useState(false);
   const [editingDeviceId, setEditingDeviceId] = useState<number | null>(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     ipAddress: "",
@@ -159,6 +92,11 @@ export function Device() {
     resetForm();
   };
 
+  const handleDeleteDevice = (deviceId: number) => {
+    deleteDevice(deviceId);
+    setDeleteConfirmId(null);
+  };
+
   const handleSaveDevice = () => {
     if (!formData.name.trim() || !formData.ipAddress.trim() || !formData.type.trim() || !formData.site.trim()) {
       alert("Name, IP Address, Type, and Site are mandatory fields");
@@ -166,23 +104,20 @@ export function Device() {
     }
 
     if (editingDeviceId) {
-      setDevices((currentDevices) =>
-        currentDevices.map((device) =>
-          device.id === editingDeviceId
-            ? {
-                ...device,
-                name: formData.name.trim(),
-                ipAddress: formData.ipAddress.trim(),
-                type: formData.type.trim(),
-                platform: formData.platform,
-                site: formData.site.trim(),
-                status: formData.status,
-                complianceRules: formData.complianceRules,
-                lastCheck: "just now",
-              }
-            : device,
-        ),
-      );
+      const existingDevice = devices.find((d) => d.id === editingDeviceId);
+      if (existingDevice) {
+        updateDevice({
+          ...existingDevice,
+          name: formData.name.trim(),
+          ipAddress: formData.ipAddress.trim(),
+          type: formData.type.trim(),
+          platform: formData.platform,
+          site: formData.site.trim(),
+          status: formData.status,
+          complianceRules: formData.complianceRules,
+          lastCheck: "just now",
+        });
+      }
     } else {
       const nextId = Math.max(...devices.map((device) => device.id), 0) + 1;
       const newDevice: Device = {
@@ -196,7 +131,7 @@ export function Device() {
         lastCheck: "just now",
         complianceRules: formData.complianceRules,
       };
-      setDevices((currentDevices) => [...currentDevices, newDevice]);
+      addDevice(newDevice);
     }
 
     handleCloseModal();
@@ -498,15 +433,28 @@ export function Device() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                   <div className="flex items-center justify-end gap-2">
-                    <button
-                      onClick={() => handleOpenEditModal(device)}
-                      className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
-                      <Trash2 size={16} />
-                    </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() => handleOpenEditModal(device)}
+                          className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                        >
+                          <Edit size={16} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Edit Device</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          onClick={() => setDeleteConfirmId(device.id)}
+                          className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Delete Device</TooltipContent>
+                    </Tooltip>
                   </div>
                 </td>
               </tr>
@@ -514,6 +462,38 @@ export function Device() {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId !== null && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-sm">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Delete Device</h2>
+            </div>
+
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-600">
+                Are you sure you want to delete this device? This action cannot be undone.
+              </p>
+            </div>
+
+            <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+              <button
+                onClick={() => setDeleteConfirmId(null)}
+                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteDevice(deleteConfirmId)}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {filteredDevices.length === 0 && (
         <div className="text-center py-12 bg-white rounded-lg shadow border border-gray-200">

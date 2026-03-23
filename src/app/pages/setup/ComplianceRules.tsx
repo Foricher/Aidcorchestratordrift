@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { Plus, Search, Edit, Trash2, CheckCircle, AlertCircle, Shield } from "lucide-react";
+import { Plus, Search, Edit, Trash2, CheckCircle, AlertCircle, Shield, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useComplianceRules } from "@/app/context/ComplianceRulesContext";
+import { useDevices } from "@/app/context/DeviceContext";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 
 const severityColors = {
   critical: "bg-red-100 text-red-800",
@@ -12,8 +14,33 @@ const severityColors = {
 
 export function ComplianceRules() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
   const navigate = useNavigate();
-  const { rules } = useComplianceRules();
+  const { rules, deleteRule, updateRule } = useComplianceRules();
+  const { devices, removeComplianceRuleFromAllDevices } = useDevices();
+
+  const getDevicesUsingRule = (ruleName: string) => {
+    return devices.filter((device) => device.complianceRules.includes(ruleName));
+  };
+
+  const handleDeleteRule = (ruleId: number) => {
+    const rule = rules.find((r) => r.id === ruleId);
+    if (!rule) return;
+
+    const devicesUsingRule = getDevicesUsingRule(rule.name);
+    
+    // Update all devices to remove this rule
+    devicesUsingRule.forEach((device) => {
+      updateRule({
+        ...rule,
+        devices: devicesUsingRule.length,
+      });
+      removeComplianceRuleFromAllDevices(rule.name);
+    });
+
+    deleteRule(ruleId);
+    setDeleteConfirmId(null);
+  };
 
   const filteredRules = rules.filter(rule =>
     rule.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -117,15 +144,28 @@ export function ComplianceRules() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm">
                   <div className="flex items-center justify-end gap-2">
-                    <button 
-                      onClick={() => navigate(`/setup/compliance-rules/${rule.id}`)}
-                      className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
-                    >
-                      <Edit size={16} />
-                    </button>
-                    <button className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors">
-                      <Trash2 size={16} />
-                    </button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button 
+                          onClick={() => navigate(`/setup/compliance-rules/${rule.id}`)}
+                          className="p-1.5 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                        >
+                          <Edit size={16} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Edit Rule</TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button 
+                          onClick={() => setDeleteConfirmId(rule.id)}
+                          className="p-1.5 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent>Delete Rule</TooltipContent>
+                    </Tooltip>
                   </div>
                 </td>
               </tr>
@@ -133,6 +173,67 @@ export function ComplianceRules() {
           </tbody>
         </table>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      {deleteConfirmId !== null && (() => {
+        const ruleToDelete = rules.find((r) => r.id === deleteConfirmId);
+        const devicesUsingRule = ruleToDelete ? getDevicesUsingRule(ruleToDelete.name) : [];
+
+        return (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-lg w-full max-w-md">
+              <div className="px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">Delete Compliance Rule</h2>
+              </div>
+
+              <div className="px-6 py-4">
+                <p className="text-sm text-gray-600 mb-4">
+                  Are you sure you want to delete <span className="font-medium">{ruleToDelete?.name}</span>? This action cannot be undone.
+                </p>
+
+                {devicesUsingRule.length > 0 && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <AlertTriangle className="text-amber-600 flex-shrink-0 mt-0.5" size={18} />
+                      <div>
+                        <p className="text-sm font-medium text-amber-900 mb-2">
+                          This rule is used by {devicesUsingRule.length} device{devicesUsingRule.length !== 1 ? 's' : ''}
+                        </p>
+                        <ul className="text-xs text-amber-800 space-y-1">
+                          {devicesUsingRule.map((device) => (
+                            <li key={device.id} className="flex items-center gap-2">
+                              <span className="text-amber-600">•</span>
+                              {device.name}
+                            </li>
+                          ))}
+                        </ul>
+                        <p className="text-xs text-amber-800 mt-2">
+                          The rule will be removed from these devices.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => handleDeleteRule(deleteConfirmId)}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {filteredRules.length === 0 && (
         <div className="text-center py-12 bg-white rounded-lg shadow border border-gray-200">
