@@ -114,25 +114,29 @@ ntp authenticate  [intent line 187]`,
     {
       ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "drift",
       missingText: `user-password-profile default  [intent line 44]
-    min-length 8
-    {
-        complexity upper-case minimum 1
-        complexity lower-case minimum 1
-        complexity numeric minimum 1
-        complexity special-char minimum 1
-    }`,
+{    [intent line 45]
+    min-length 8 [intent line 46]
+    {    [intent line 47]
+        complexity upper-case minimum 1 [intent line 48]
+        complexity lower-case minimum 1   [intent line 49]
+        complexity numeric minimum 1    [intent line 50]
+        complexity special-char minimum 1     [intent line 51]
+     }   [intent line 52]
+    }   [intent line 53]`,
       extraText: `user-password-profile default  [running line 44]
-    min-length 6
-    {
-        complexity upper-case minimum 0
-        complexity lower-case minimum 1
-    }`,
+{   [running line 45]
+    min-length 6    [running line 46]
+    {      [running line 47]
+        complexity upper-case minimum 0     [running line 48]
+        complexity lower-case minimum 1     [running line 49]
+    }  [running line 50]  
+ }  [running line 51]`,
     },
     {
       ruleId: 2, ruleName: "SNMP Configuration", severity: "high", status: "drift",
       missingText: `snmp-server user snmpv3user  [intent line 112]
-    auth sha auth-password $CREDENTIAL$
-snmp-server view all 1.3.6  [intent line 113]`,
+auth sha auth-password $CREDENTIAL$  [intent line 113]
+snmp-server view all 1.3.6  [intent line 114]`,
       extraText: `snmp-server community public ro  [running line 112]
 snmp-server community private rw  [running line 113]
 snmp-server enable traps  [running line 114]`,
