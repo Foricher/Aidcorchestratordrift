@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ArrowLeft, Plus, Trash2, Save, Check, ChevronsUpDown, X, Shield } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Save, Check, ChevronsUpDown, X, Shield, Code, Layout } from "lucide-react";
 import { type ComplianceRuleDef, type Substitute } from "@/app/data/complianceRules";
 import { useComplianceRules } from "@/app/context/ComplianceRulesContext";
 import { Popover, PopoverTrigger, PopoverContent } from "@/app/components/ui/popover";
 import { Command, CommandInput, CommandList, CommandItem, CommandEmpty, CommandGroup } from "@/app/components/ui/command";
 import { Badge } from "@/app/components/ui/badge";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 
 interface ComplianceRule {
   id?: number;
@@ -230,6 +231,25 @@ export function ComplianceRuleEdit() {
   );
 
   const [scriptPopoverOpen, setScriptPopoverOpen] = useState(false);
+  const [jsonEditorMode, setJsonEditorMode] = useState(false);
+  const [jsonText, setJsonText] = useState(JSON.stringify(rule.compliance_rule_def, null, 2));
+  const [jsonError, setJsonError] = useState<string | null>(null);
+
+  const handleJsonChange = (text: string) => {
+    setJsonText(text);
+    try {
+      const parsed = JSON.parse(text);
+      setRule({ ...rule, compliance_rule_def: parsed });
+      setJsonError(null);
+    } catch (err) {
+      setJsonError("Invalid JSON format");
+    }
+  };
+
+  const handleUiChange = () => {
+    setJsonText(JSON.stringify(rule.compliance_rule_def, null, 2));
+    setJsonError(null);
+  };
 
   const addRuleDef= () => {
     setRule({
@@ -245,13 +265,16 @@ export function ComplianceRuleEdit() {
     const newDefs = [...rule.compliance_rule_def];
     newDefs[index] = updated;
     setRule({ ...rule, compliance_rule_def: newDefs });
+    handleUiChange();
   };
 
   const deleteRuleDef = (index: number) => {
+    const newDefs = rule.compliance_rule_def.filter((_, i) => i !== index);
     setRule({
       ...rule,
-      compliance_rule_def: rule.compliance_rule_def.filter((_, i) => i !== index)
+      compliance_rule_def: newDefs
     });
+    setJsonText(JSON.stringify(newDefs, null, 2));
   };
 
   const toggleScript = (script: string) => {
@@ -379,25 +402,83 @@ export function ComplianceRuleEdit() {
         <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Compliance Rule Definition</h2>
-            <button
-              onClick={addRuleDef}
-              className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm"
-            >
-              <Plus size={16} />
-              Add Rule Definition
-            </button>
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      setJsonEditorMode(false);
+                      handleUiChange();
+                    }}
+                    className={`p-1.5 rounded transition-colors ${
+                      !jsonEditorMode
+                        ? "bg-blue-100 text-blue-600"
+                        : "text-gray-600 hover:text-gray-700 hover:bg-gray-100"
+                    }`}
+                  >
+                    <Layout size={16} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>UI Editor</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => setJsonEditorMode(true)}
+                    className={`p-1.5 rounded transition-colors ${
+                      jsonEditorMode
+                        ? "bg-blue-100 text-blue-600"
+                        : "text-gray-600 hover:text-gray-700 hover:bg-gray-100"
+                    }`}
+                  >
+                    <Code size={16} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>JSON Editor</TooltipContent>
+              </Tooltip>
+              {!jsonEditorMode && (
+                <button
+                  onClick={addRuleDef}
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm ml-2"
+                >
+                  <Plus size={16} />
+                  Add Rule Definition
+                </button>
+              )}
+            </div>
           </div>
-          <div className="space-y-4">
-            {rule.compliance_rule_def.map((ruleDef, idx) => (
-              <div key={idx}>
-                <RuleDefEditor
-                  ruleDef={ruleDef}
-                  onChange={(updated) => updateRuleDef(idx, updated)}
-                  onDelete={() => deleteRuleDef(idx)}
-                />
-              </div>
-            ))}
-          </div>
+
+          {jsonEditorMode ? (
+            <div className="space-y-2">
+              <textarea
+                value={jsonText}
+                onChange={(e) => handleJsonChange(e.target.value)}
+                className={`w-full px-3 py-2 border rounded-lg font-mono text-xs focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  jsonError ? "border-red-300 focus:ring-red-500" : "border-gray-300"
+                }`}
+                rows={20}
+                spellCheck="false"
+              />
+              {jsonError && (
+                <p className="text-xs text-red-600 font-medium">{jsonError}</p>
+              )}
+              <p className="text-xs text-gray-500">
+                Edit the JSON directly. Changes will be automatically synced to the rule definition.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {rule.compliance_rule_def.map((ruleDef, idx) => (
+                <div key={idx}>
+                  <RuleDefEditor
+                    ruleDef={ruleDef}
+                    onChange={(updated) => updateRuleDef(idx, updated)}
+                    onDelete={() => deleteRuleDef(idx)}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Remediation */}
@@ -459,14 +540,6 @@ export function ComplianceRuleEdit() {
               </Command>
             </PopoverContent>
           </Popover>
-        </div>
-
-        {/* JSON Preview */}
-        <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">JSON Preview</h2>
-          <pre className="bg-gray-50 p-4 rounded-lg overflow-auto text-xs font-mono max-h-96">
-            {JSON.stringify(rule, null, 2)}
-          </pre>
         </div>
       </div>
     </div>
