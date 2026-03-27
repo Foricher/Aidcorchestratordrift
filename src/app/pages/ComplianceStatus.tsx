@@ -3,149 +3,10 @@ import { Search, CheckCircle, XCircle, AlertTriangle, RefreshCw, CheckCheck, Ter
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import { Tooltip, TooltipTrigger, TooltipContent } from "../components/ui/tooltip";
 import { useSSHTerminal } from "../context/SSHTerminalContext";
+import { useDevices } from "../context/DeviceContext";
+import { mockComplianceData, deviceDriftResults, deviceRunningContent } from "../data/complianceStatus";
 import referenceSnapshot from '../../../misc/aosx-reference-snapshot.txt?raw';
 import runningSnapshot from '../../../misc/aosx-running-snapshot.txt?raw';
-
-interface DeviceCompliance {
-  id: number;
-  deviceName: string;
-  ipAddress: string;
-  site: string;
-  totalRules: number;
-  passedRules: number;
-  failedRules: number;
-  status: "compliant" | "drift" | "error";
-  lastCheck: string;
-}
-
-const mockComplianceData: DeviceCompliance[] = [
-  {
-    id: 1,
-    deviceName: "router-core-01",
-    ipAddress: "10.0.1.1",
-    site: "Brest Lab",
-    totalRules: 4,
-    passedRules: 4,
-    failedRules: 0,
-    status: "compliant",
-    lastCheck: "2 min ago"
-  },
-  {
-    id: 2,
-    deviceName: "switch-access-01",
-    ipAddress: "10.0.2.1",
-    site: "Brest Lab",
-    totalRules: 4,
-    passedRules: 3,
-    failedRules: 1,
-    status: "drift",
-    lastCheck: "5 min ago"
-  },
-  {
-    id: 3,
-    deviceName: "switch-access-02",
-    ipAddress: "10.0.2.2",
-    site: "Thousand Oaks",
-    totalRules: 4,
-    passedRules: 4,
-    failedRules: 0,
-    status: "compliant",
-    lastCheck: "5 min ago"
-  },
-  {
-    id: 4,
-    deviceName: "firewall-01",
-    ipAddress: "10.0.3.1",
-    site: "Brest Lab",
-    totalRules: 4,
-    passedRules: 2,
-    failedRules: 2,
-    status: "drift",
-    lastCheck: "1 min ago"
-  },
-  {
-    id: 5,
-    deviceName: "router-branch-01",
-    ipAddress: "10.1.1.1",
-    site: "Thousand Oaks",
-    totalRules: 4,
-    passedRules: 0,
-    failedRules: 0,
-    status: "error",
-    lastCheck: "2 hours ago"
-  },
-];
-
-interface RuleDriftResult {
-  ruleId: number;
-  ruleName: string;
-  severity: "critical" | "high" | "medium" | "low";
-  status: "compliant" | "drift";
-  missingText: string;
-  extraText: string;
-}
-
-const deviceDriftResults: Record<number, RuleDriftResult[]> = {
-  1: [
-    { ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 2, ruleName: "SNMP Configuration",  severity: "high",     status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 3, ruleName: "NTP Server Sync",      severity: "medium",   status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 4, ruleName: "SSH Version Check",    severity: "critical", status: "compliant", missingText: "", extraText: "" },
-  ],
-  2: [
-    { ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 2, ruleName: "SNMP Configuration",  severity: "high",     status: "compliant", missingText: "", extraText: "" },
-    {
-      ruleId: 3, ruleName: "NTP Server Sync", severity: "medium", status: "drift",
-      missingText: `ntp server 10.0.0.1 prefer  [intent line 185]
-ntp server 10.0.0.2  [intent line 186]
-ntp authenticate  [intent line 187]`,
-      extraText: "",
-    },
-    { ruleId: 4, ruleName: "SSH Version Check", severity: "critical", status: "compliant", missingText: "", extraText: "" },
-  ],
-  3: [
-    { ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 2, ruleName: "SNMP Configuration",  severity: "high",     status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 3, ruleName: "NTP Server Sync",      severity: "medium",   status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 4, ruleName: "SSH Version Check",    severity: "critical", status: "compliant", missingText: "", extraText: "" },
-  ],
-  4: [
-    {
-      ruleId: 1, ruleName: "Password Complexity", severity: "critical", status: "drift",
-      missingText: `user-password-profile default  [intent line 44]
-{    [intent line 45]
-    min-length 8 [intent line 46]
-    {    [intent line 47]
-        complexity upper-case minimum 1 [intent line 48]
-        complexity lower-case minimum 1   [intent line 49]
-        complexity numeric minimum 1    [intent line 50]
-        complexity special-char minimum 1     [intent line 51]
-     }   [intent line 52]
-    }   [intent line 53]`,
-      extraText: `user-password-profile default  [running line 44]
-{   [running line 45]
-    min-length 6    [running line 46]
-    {      [running line 47]
-        complexity upper-case minimum 0     [running line 48]
-        complexity lower-case minimum 1     [running line 49]
-    }  [running line 50]  
- }  [running line 51]`,
-    },
-    {
-      ruleId: 2, ruleName: "SNMP Configuration", severity: "high", status: "drift",
-      missingText: `snmp-server user snmpv3user  [intent line 112]
-auth sha auth-password $CREDENTIAL$  [intent line 113]
-snmp-server view all 1.3.6  [intent line 114]`,
-      extraText: `snmp-server community public ro  [running line 112]
-snmp-server community private rw  [running line 113]
-snmp-server enable traps  [running line 114]`,
-    },
-    { ruleId: 3, ruleName: "NTP Server Sync",   severity: "medium",   status: "compliant", missingText: "", extraText: "" },
-    { ruleId: 4, ruleName: "SSH Version Check", severity: "critical", status: "compliant", missingText: "", extraText: "" },
-  ],
-  5: [],
-};
 
 function parseDriftAnnotated(text: string): Array<{ lineNumber: number | null; text: string }> {
   return text.split('\n').map(line => {
@@ -206,7 +67,10 @@ function DriftTab({
   onAcceptRule: (deviceId: number, ruleId: number) => void;
   onRejectRule: (deviceId: number, ruleId: number) => void;
 }) {
+  const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const results = deviceDriftResults[deviceId] ?? [];
+
   if (results.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500 text-sm">
@@ -215,18 +79,19 @@ function DriftTab({
     );
   }
   return (
-    <div className="flex flex-col gap-3 overflow-auto max-h-[500px] pr-1">
-      {results.map(rule => (
-        <div
-          key={rule.ruleId}
-          className={`rounded-lg border ${
-            rule.status === "drift" && !acceptedRules[deviceId]?.has(rule.ruleId)
-              ? "border-orange-300 bg-orange-50"
-              : rule.status === "drift" && acceptedRules[deviceId]?.has(rule.ruleId)
-              ? "border-green-300 bg-green-50"
-              : "border-gray-200 bg-gray-50"
-          }`}
-        >
+    <>
+      <div className="flex flex-col gap-3 overflow-auto max-h-[500px] pr-1">
+        {results.map(rule => (
+          <div
+            key={rule.ruleId}
+            className={`rounded-lg border ${
+              rule.status === "drift" && !acceptedRules[deviceId]?.has(rule.ruleId)
+                ? "border-orange-300 bg-orange-50"
+                : rule.status === "drift" && acceptedRules[deviceId]?.has(rule.ruleId)
+                ? "border-green-300 bg-green-50"
+                : "border-gray-200 bg-gray-50"
+            }`}
+          >
           <div className={`flex items-center gap-2 px-4 py-2.5 rounded-t-lg ${
             rule.status === "drift" && !acceptedRules[deviceId]?.has(rule.ruleId)
               ? "bg-orange-100 border-b border-orange-200"
@@ -279,7 +144,7 @@ function DriftTab({
               )}
               <div className="flex gap-2 pt-2 border-t border-orange-200">
                 <button
-                  onClick={() => onAcceptRule(deviceId, rule.ruleId)}
+                  onClick={() => { onAcceptRule(deviceId, rule.ruleId); setIsAcceptModalOpen(true); }}
                   className="flex items-center gap-1 px-3 py-1 bg-green-50 text-green-700 rounded hover:bg-green-100 transition-colors text-xs font-medium border border-green-200"
                   title="Accept this drift"
                 >
@@ -321,7 +186,7 @@ function DriftTab({
                   Accept
                 </button>
                 <button
-                  onClick={() => onRejectRule(deviceId, rule.ruleId)}
+                  onClick={() => { onRejectRule(deviceId, rule.ruleId); setIsRejectModalOpen(true); }}
                   className="flex items-center gap-1 px-3 py-1 bg-red-50 text-red-700 rounded hover:bg-red-100 transition-colors text-xs font-medium border border-red-200"
                   title="Reject this accepted drift"
                 >
@@ -331,17 +196,68 @@ function DriftTab({
               </div>
             </div>
           )}
+          </div>
+        ))}
+      </div>
+
+      {isAcceptModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-lg">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Accept Drift</h2>
+            </div>
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-700">
+                Accept the current drift for this compliance rule. This action confirms user approval of the drift, and the rule status will be updated to compliant.
+              </p>
+            </div>
+            <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+              <button
+                onClick={() => setIsAcceptModalOpen(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
-      ))}
-    </div>
+      )}
+
+      {isRejectModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-lg">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Reject Drift</h2>
+            </div>
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-700">
+                Reject the previously accepted drift for this compliance rule. The rule status will be updated to indicate drift.
+              </p>
+            </div>
+            <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+              <button
+                onClick={() => setIsRejectModalOpen(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 function ConfigViewer({ text }: { text: string }) {
   const lines = text.split('\n');
   return (
-    <div className="rounded border border-slate-700 overflow-hidden bg-slate-950">
-      <div className="overflow-auto max-h-[400px]">
+    <div className="rounded-xl border border-slate-700 overflow-hidden bg-slate-950 shadow-sm">
+      <div className="px-4 py-2 border-b border-slate-700 bg-slate-900/70 flex items-center justify-between">
+        <span className="text-[11px] uppercase tracking-wide text-slate-400 font-medium">Configuration</span>
+        <span className="text-[11px] text-slate-500">{lines.length} lines</span>
+      </div>
+      <div className="overflow-auto max-h-[420px]">
         {lines.map((line, i) => (
           <div key={i} className="flex hover:bg-slate-800/50">
             <span className="select-none text-right text-slate-500 pr-3 pl-4 py-0.5 min-w-[3.5rem] border-r border-slate-700 font-mono text-xs leading-relaxed shrink-0">
@@ -362,7 +278,18 @@ export function ComplianceStatus() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
   const [acceptedRules, setAcceptedRules] = useState<Record<number, Set<number>>>({});
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+  const [isResolveModalOpen, setIsResolveModalOpen] = useState(false);
   const { openSSHTerminal } = useSSHTerminal();
+  const { devices, intentTemplates } = useDevices();
+
+  const getIntentContent = (deviceId: number): string => {
+    const device = devices.find((d) => d.id === deviceId);
+    if (!device) return referenceSnapshot;
+    if (device.intentTemplateName === "") return device.intentTemplateContent;
+    const template = intentTemplates.find((t) => t.name === device.intentTemplateName);
+    return template?.content ?? referenceSnapshot;
+  };
 
   const acceptRule = (deviceId: number, ruleId: number) => {
     setAcceptedRules(prev => ({
@@ -619,6 +546,7 @@ export function ComplianceStatus() {
                         <div className="px-8 py-4 border-t border-gray-200">
                           <div className="flex items-center justify-start gap-1.5 mb-4 pl-8">
                             <button 
+                              onClick={() => setIsCheckModalOpen(true)}
                               className="flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 rounded hover:bg-blue-100 transition-colors text-xs font-medium border border-blue-200"
                               title="Check Drift"
                             >
@@ -626,6 +554,7 @@ export function ComplianceStatus() {
                               Check
                             </button>
                             <button 
+                              onClick={() => setIsResolveModalOpen(true)}
                               disabled={device.status !== "drift"}
                               className={`flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium transition-colors border ${
                                 device.status === "drift" 
@@ -647,12 +576,27 @@ export function ComplianceStatus() {
                             </button>
                           </div>
                           <Tabs defaultValue="drift" className="px-8">
-                            <TabsList className="mb-3">
-                              <TabsTrigger value="drift">Drift</TabsTrigger>
-                              <TabsTrigger value="intent">Intent Configuration</TabsTrigger>
-                              <TabsTrigger value="running">Running Configuration</TabsTrigger>
+                            <TabsList className="mb-4 h-auto p-1 bg-slate-100 border border-slate-200 rounded-xl gap-1 inline-flex">
+                              <TabsTrigger
+                                value="drift"
+                                className="rounded-lg px-3 py-1.5 text-xs md:text-sm font-medium text-slate-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"
+                              >
+                                Drift
+                              </TabsTrigger>
+                              <TabsTrigger
+                                value="intent"
+                                className="rounded-lg px-3 py-1.5 text-xs md:text-sm font-medium text-slate-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"
+                              >
+                                Intent Configuration
+                              </TabsTrigger>
+                              <TabsTrigger
+                                value="running"
+                                className="rounded-lg px-3 py-1.5 text-xs md:text-sm font-medium text-slate-600 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"
+                              >
+                                Running Configuration
+                              </TabsTrigger>
                             </TabsList>
-                            <TabsContent value="drift" className="mt-0 px-8">
+                            <TabsContent value="drift" className="mt-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
                               <DriftTab 
                                 deviceId={device.id} 
                                 acceptedRules={acceptedRules}
@@ -660,11 +604,11 @@ export function ComplianceStatus() {
                                 onRejectRule={rejectRule}
                               />
                             </TabsContent>
-                            <TabsContent value="intent" className="mt-0 px-8">
-                              <ConfigViewer text={referenceSnapshot} />
+                            <TabsContent value="intent" className="mt-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                              <ConfigViewer text={getIntentContent(device.id)} />
                             </TabsContent>
-                            <TabsContent value="running" className="mt-0 px-8">
-                              <ConfigViewer text={runningSnapshot} />
+                            <TabsContent value="running" className="mt-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+                              <ConfigViewer text={deviceRunningContent[device.id] ?? runningSnapshot} />
                             </TabsContent>
                           </Tabs>
                         </div>
@@ -681,6 +625,52 @@ export function ComplianceStatus() {
       {filteredData.length === 0 && (
         <div className="text-center py-12 bg-white rounded-lg shadow border border-gray-200">
           <p className="text-gray-500">No devices found matching your criteria.</p>
+        </div>
+      )}
+
+      {isCheckModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-lg">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Compliance Check</h2>
+            </div>
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-700">
+                Run the Ansible script to retrieve the running configuration, then update the device’s compliance status
+              </p>
+            </div>
+            <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+              <button
+                onClick={() => setIsCheckModalOpen(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isResolveModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-lg w-full max-w-lg">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-gray-900">Drift Remediation</h2>
+            </div>
+            <div className="px-6 py-4">
+              <p className="text-sm text-gray-700">
+                Execute the Ansible remediation scripts for the device to address the compliance rules in drift, then perform another drift check and update the device’s compliance status.
+              </p>
+            </div>
+            <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+              <button
+                onClick={() => setIsResolveModalOpen(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

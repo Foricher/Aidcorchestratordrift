@@ -60,6 +60,17 @@ export const mockRules: ComplianceRule[] = [
   },
   {
     id: 4,
+    name: "NTP Server Sync",
+    description: "Check that devices are synchronized with corporate NTP servers",
+    severity: "medium",
+    enabled: true,
+    devices: 24,
+    platform: "AOS8",
+    compliance_rule_def: [{ include_regex: "ntp\\s+.*", exclude_regex: "", substitutes: [], children: [] }],
+    remediation: { scripts: ["sync-ntp-servers"] },
+  },
+  {
+    id: 5,
     name: "SSH Version Check",
     description: "Ensure SSH version 2 is enabled and version 1 is disabled",
     severity: "critical",
@@ -70,7 +81,7 @@ export const mockRules: ComplianceRule[] = [
     remediation: { scripts: ["enforce-sshv2"] },
   },
   {
-    id: 5,
+    id: 6,
     name: "BGP",
     description: "Verify BGP routing protocol configuration",
     severity: "critical",
@@ -81,7 +92,7 @@ export const mockRules: ComplianceRule[] = [
     remediation: { scripts: ["configure-evpn-vxlan"] },
   },
   {
-    id: 6,
+    id: 7,
     name: "OSPF",
     description: "Ensure OSPF routing protocol is properly configured",
     severity: "critical",
@@ -92,7 +103,7 @@ export const mockRules: ComplianceRule[] = [
     remediation: { scripts: ["configure-evpn-vxlan"] },
   },
   {
-    id: 7,
+    id: 8,
     name: "OSPF",
     description: "Ensure OSPF routing protocol is properly configured",
     severity: "critical",
@@ -159,7 +170,7 @@ export const mockRules: ComplianceRule[] = [
   },
 
   {
-    id: 8,
+    id: 9,
     name: "Banner Configuration",
     description: "Verify login banners are configured",
     severity: "low",

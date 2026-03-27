@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import { Layout } from "./components/Layout";
 import { Device } from "./pages/setup/Device";
+import { DeviceEdit } from "./pages/setup/DeviceEdit";
 import { ComplianceRules } from "./pages/setup/ComplianceRules";
 import { ComplianceRuleEdit } from "./pages/setup/ComplianceRuleEdit";
 import { DriftRemediation } from "./pages/setup/DriftRemediation";
@@ -15,6 +16,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: Dashboard },
       { path: "setup/device", Component: Device },
+      { path: "setup/device/new", Component: DeviceEdit },
+      { path: "setup/device/:id", Component: DeviceEdit },
       { path: "setup/compliance-rules", Component: ComplianceRules },
       { path: "setup/compliance-rules/:id", Component: ComplianceRuleEdit },
       { path: "setup/drift-remediation", Component: DriftRemediation },
