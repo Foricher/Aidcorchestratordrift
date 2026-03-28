@@ -204,7 +204,8 @@ export function History() {
 
       {/* History Timeline */}
       <div className="bg-white rounded-lg shadow border border-gray-200 overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1100px]">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -290,6 +291,7 @@ export function History() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {filteredHistory.length === 0 && (

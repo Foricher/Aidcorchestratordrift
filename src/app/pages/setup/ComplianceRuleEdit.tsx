@@ -338,7 +338,7 @@ export function ComplianceRuleEdit() {
         {/* Basic Information */}
         <div className="bg-white rounded-lg shadow border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Rule Name <span className="text-red-500">*</span>
@@ -383,7 +383,7 @@ export function ComplianceRuleEdit() {
               </select>
             </div>
 
-            <div className="col-span-2">
+            <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Description
               </label>

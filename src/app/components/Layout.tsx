@@ -15,6 +15,7 @@ export function Layout() {
   const [setupOpen, setSetupOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 1024);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     // Load from localStorage, default to false (expanded)
     const saved = localStorage.getItem('sidebarCollapsed');
@@ -31,6 +32,38 @@ export function Layout() {
     localStorage.setItem('sidebarCollapsed', JSON.stringify(sidebarCollapsed));
   }, [sidebarCollapsed]);
 
+  // Keep layout behavior in sync with desktop/mobile breakpoint.
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Close mobile navigation on route change to maximize content space.
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  // Allow closing mobile drawers with Escape for keyboard accessibility.
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || isDesktop) return;
+
+      if (mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+      if (rightSidebarOpen) {
+        setRightSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isDesktop, mobileMenuOpen, rightSidebarOpen]);
+
   // Function to open SSH terminal for a specific device
   const openSSHTerminal = (deviceName: string) => {
     const newId = `terminal-${Date.now()}`;
@@ -42,6 +75,27 @@ export function Layout() {
 
   const isActive = (path: string) => location.pathname === path;
   const isSetupActive = location.pathname.startsWith("/setup");
+  const effectiveSidebarCollapsed = isDesktop ? sidebarCollapsed : false;
+
+  const handleToggleMobileMenu = () => {
+    setMobileMenuOpen((prev) => {
+      const next = !prev;
+      if (next && !isDesktop) {
+        setRightSidebarOpen(false);
+      }
+      return next;
+    });
+  };
+
+  const handleToggleTerminalSidebar = () => {
+    setRightSidebarOpen((prev) => {
+      const next = !prev;
+      if (next && !isDesktop) {
+        setMobileMenuOpen(false);
+      }
+      return next;
+    });
+  };
 
   return (
     <SSHTerminalContext.Provider
@@ -60,7 +114,7 @@ export function Layout() {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={handleToggleMobileMenu}
               className="lg:hidden p-1 hover:bg-blue-700 rounded"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -71,7 +125,7 @@ export function Layout() {
           </div>
           <div className="flex items-center gap-4">
             <button
-              onClick={() => setRightSidebarOpen(!rightSidebarOpen)}
+              onClick={handleToggleTerminalSidebar}
               className="p-1 hover:bg-blue-700 rounded transition-colors group"
               title={rightSidebarOpen ? "Hide SSH Terminal" : "Show SSH Terminal"}
             >
@@ -82,29 +136,39 @@ export function Layout() {
         </div>
       </header>
 
-      <div className="flex">
+      <div className="flex relative">
+        {!isDesktop && (
+          <button
+            onClick={() => setMobileMenuOpen(false)}
+            className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-200 ${
+              mobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+            }`}
+            aria-label="Close navigation menu"
+          />
+        )}
+
         {/* Sidebar */}
         <aside
-          className={`${
-            mobileMenuOpen ? "block" : "hidden"
-          } lg:block bg-white border-r border-gray-200 min-h-[calc(100vh-60px)] shadow-sm transition-all duration-300 ease-in-out ${
-            sidebarCollapsed ? "w-16" : "w-64"
+          className={`fixed top-[60px] bottom-0 left-0 z-50 bg-white border-r border-gray-200 min-h-[calc(100vh-60px)] shadow-sm transition-transform duration-300 ease-in-out w-72 max-w-[85vw] ${
+            mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:relative lg:top-auto lg:bottom-auto lg:left-auto lg:z-auto lg:max-w-none lg:translate-x-0 ${
+            effectiveSidebarCollapsed ? "lg:w-16" : "lg:w-64"
           }`}
         >
           {/* Sidebar Toggle Button - positioned at top of sidebar */}
           {/* Sidebar Toggle Button - Enhanced Design */}
-          <div className="relative flex justify-center p-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
+          <div className="relative hidden lg:flex justify-center p-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
             <button
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
               className="group relative flex items-center justify-center w-10 h-10 bg-white hover:bg-blue-50 border border-gray-300 hover:border-blue-300 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out transform hover:scale-105 active:scale-95"
-              title={sidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+              title={effectiveSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
             >
               {/* Background glow effect on hover */}
               <div className="absolute inset-0 bg-blue-400 rounded-lg opacity-0 group-hover:opacity-10 transition-opacity duration-200"></div>
 
               {/* Icon */}
               <div className="relative z-10">
-                {sidebarCollapsed ? (
+                {effectiveSidebarCollapsed ? (
                   <ChevronRight size={18} className="text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
                 ) : (
                   <ChevronLeft size={18} className="text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
@@ -116,15 +180,15 @@ export function Layout() {
             </button>
           </div>
 
-          <nav className={`p-4 ${sidebarCollapsed ? "p-2" : "p-4"} transition-all duration-300`}>
+          <nav className={`p-4 ${effectiveSidebarCollapsed ? "p-2" : "p-4"} transition-all duration-300`}>
             {/* Orchestrator Drift Menu - Static Header */}
             <div className="mb-6">
               <div
                 className={`flex items-center px-2 py-2 text-sm font-semibold text-gray-700 transition-all duration-300 ${
-                  sidebarCollapsed ? "justify-center" : "gap-2"
+                  effectiveSidebarCollapsed ? "justify-center" : "gap-2"
                 }`}
               >
-                {sidebarCollapsed ? (
+                {effectiveSidebarCollapsed ? (
                   <Shield size={20} className="text-blue-600" />
                 ) : (
                   <>
@@ -135,7 +199,7 @@ export function Layout() {
               </div>
               
               {/* Orchestrator Drift Submenu - Always Visible */}
-              <div className={`mt-2 transition-all duration-300 ${sidebarCollapsed ? "" : "border-l-2 border-gray-200 pl-4"}`}>
+              <div className={`mt-2 transition-all duration-300 ${effectiveSidebarCollapsed ? "" : "border-l-2 border-gray-200 pl-4"}`}>
                   {/* Setup Menu with Submenu */}
                   <div>
                     <button
@@ -144,11 +208,11 @@ export function Layout() {
                         isSetupActive
                           ? "bg-blue-50 text-blue-700 font-medium"
                           : "text-gray-700 hover:bg-gray-100"
-                      } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-2" : ""}`}
-                      title={sidebarCollapsed ? "Setup" : ""}
+                      } transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center p-2" : ""}`}
+                      title={effectiveSidebarCollapsed ? "Setup" : ""}
                     >
-                      <div className={`flex items-center transition-all duration-300 ${sidebarCollapsed ? "justify-center" : "gap-2"}`}>
-                        {sidebarCollapsed ? (
+                      <div className={`flex items-center transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center" : "gap-2"}`}>
+                        {effectiveSidebarCollapsed ? (
                           <Settings size={18} />
                         ) : (
                           <>
@@ -173,11 +237,11 @@ export function Layout() {
                             isActive("/setup/device")
                               ? "bg-blue-50 text-blue-700 font-medium"
                               : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                          } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-1.5" : ""}`}
-                          title={sidebarCollapsed ? "Device" : ""}
+                          } transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center p-1.5" : ""}`}
+                          title={effectiveSidebarCollapsed ? "Device" : ""}
                         >
-                          <Database size={sidebarCollapsed ? 16 : 12} />
-                          {!sidebarCollapsed && <span>Device</span>}
+                          <Database size={effectiveSidebarCollapsed ? 16 : 12} />
+                          {!effectiveSidebarCollapsed && <span>Device</span>}
                         </Link>
                         <Link
                           to="/setup/compliance-rules"
@@ -185,11 +249,11 @@ export function Layout() {
                             isActive("/setup/compliance-rules")
                               ? "bg-blue-50 text-blue-700 font-medium"
                               : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                          } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-1.5" : ""}`}
-                          title={sidebarCollapsed ? "Compliance Rules" : ""}
+                          } transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center p-1.5" : ""}`}
+                          title={effectiveSidebarCollapsed ? "Compliance Rules" : ""}
                         >
-                          <Shield size={sidebarCollapsed ? 16 : 12} />
-                          {!sidebarCollapsed && <span>Compliance Rules</span>}
+                          <Shield size={effectiveSidebarCollapsed ? 16 : 12} />
+                          {!effectiveSidebarCollapsed && <span>Compliance Rules</span>}
                         </Link>
                         <Link
                           to="/setup/drift-remediation"
@@ -197,11 +261,11 @@ export function Layout() {
                             isActive("/setup/drift-remediation")
                               ? "bg-blue-50 text-blue-700 font-medium"
                               : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                          } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-1.5" : ""}`}
-                          title={sidebarCollapsed ? "Remediation" : ""}
+                          } transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center p-1.5" : ""}`}
+                          title={effectiveSidebarCollapsed ? "Remediation" : ""}
                         >
-                          <Wrench size={sidebarCollapsed ? 16 : 12} />
-                          {!sidebarCollapsed && <span>Remediation</span>}
+                          <Wrench size={effectiveSidebarCollapsed ? 16 : 12} />
+                          {!effectiveSidebarCollapsed && <span>Remediation</span>}
                         </Link>
                         <Link
                           to="/setup/schedulers"
@@ -209,11 +273,11 @@ export function Layout() {
                             isActive("/setup/schedulers")
                               ? "bg-blue-50 text-blue-700 font-medium"
                               : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                          } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-1.5" : ""}`}
-                          title={sidebarCollapsed ? "Schedulers" : ""}
+                          } transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center p-1.5" : ""}`}
+                          title={effectiveSidebarCollapsed ? "Schedulers" : ""}
                         >
-                          <CalendarClock size={sidebarCollapsed ? 16 : 12} />
-                          {!sidebarCollapsed && <span>Schedulers</span>}
+                          <CalendarClock size={effectiveSidebarCollapsed ? 16 : 12} />
+                          {!effectiveSidebarCollapsed && <span>Schedulers</span>}
                         </Link>
                       </div>
                     )}
@@ -226,11 +290,11 @@ export function Layout() {
                     isActive("/compliance-status")
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "text-gray-700 hover:bg-gray-100"
-                  } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-2" : ""}`}
-                  title={sidebarCollapsed ? "Compliance Status" : ""}
+                  } transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center p-2" : ""}`}
+                  title={effectiveSidebarCollapsed ? "Compliance Status" : ""}
                 >
-                  <CheckCircle size={sidebarCollapsed ? 18 : 14} />
-                  {!sidebarCollapsed && <span>Compliance Status</span>}
+                  <CheckCircle size={effectiveSidebarCollapsed ? 18 : 14} />
+                  {!effectiveSidebarCollapsed && <span>Compliance Status</span>}
                 </Link>
 
                 {/* History */}
@@ -240,11 +304,11 @@ export function Layout() {
                     isActive("/history")
                       ? "bg-blue-50 text-blue-700 font-medium"
                       : "text-gray-700 hover:bg-gray-100"
-                  } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-2" : ""}`}
-                  title={sidebarCollapsed ? "History" : ""}
+                  } transition-all duration-300 ${effectiveSidebarCollapsed ? "justify-center p-2" : ""}`}
+                  title={effectiveSidebarCollapsed ? "History" : ""}
                 >
-                  <History size={sidebarCollapsed ? 18 : 14} />
-                  {!sidebarCollapsed && <span>History</span>}
+                  <History size={effectiveSidebarCollapsed ? 18 : 14} />
+                  {!effectiveSidebarCollapsed && <span>History</span>}
                 </Link>
               </div>
             </div>
@@ -253,37 +317,73 @@ export function Layout() {
 
         {/* Main Content Container with Resizable Panels */}
         <PanelGroup direction="horizontal" className="flex-1">
-          <Panel defaultSize={65} minSize={30} className="flex">
+          <Panel defaultSize={isDesktop && rightSidebarOpen ? 65 : 100} minSize={30} className="flex">
             {/* Main Content */}
-            <main className="flex-1 p-6 overflow-auto">
+            <main className="flex-1 p-4 sm:p-6 overflow-auto">
               <Outlet />
             </main>
           </Panel>
 
           {/* Resize Handle - only show when right sidebar is open */}
-          {rightSidebarOpen && (
+          {isDesktop && rightSidebarOpen && (
             <PanelResizeHandle className="w-1 bg-gray-300 hover:bg-blue-400 transition-colors cursor-col-resize" />
           )}
 
           {/* Right Sidebar with SSH Terminal - Always mounted to preserve xterm state */}
-          <Panel
-            defaultSize={35}
-            minSize={20}
-            maxSize={70}
-            className={`flex flex-col ${rightSidebarOpen ? "" : "hidden"}`}
-            style={{ display: rightSidebarOpen ? "flex" : "none" }}
-          >
-            <RightSidebar
-              isOpen={rightSidebarOpen}
-              tabs={terminalTabs}
-              setTabs={setTerminalTabs}
-              activeTabId={activeTerminalId}
-              setActiveTabId={setActiveTerminalId}
-              showDeviceModal={showDeviceModal}
-              setShowDeviceModal={setShowDeviceModal}
-            />
-          </Panel>
+          {isDesktop && (
+            <Panel
+              defaultSize={35}
+              minSize={20}
+              maxSize={70}
+              className={`flex flex-col ${rightSidebarOpen ? "" : "hidden"}`}
+              style={{ display: rightSidebarOpen ? "flex" : "none" }}
+            >
+              <RightSidebar
+                isOpen={rightSidebarOpen}
+                tabs={terminalTabs}
+                setTabs={setTerminalTabs}
+                activeTabId={activeTerminalId}
+                setActiveTabId={setActiveTerminalId}
+                showDeviceModal={showDeviceModal}
+                setShowDeviceModal={setShowDeviceModal}
+              />
+            </Panel>
+          )}
         </PanelGroup>
+
+        {!isDesktop && (
+          <>
+            <button
+              onClick={() => setRightSidebarOpen(false)}
+              className={`fixed inset-0 bg-black/30 z-40 transition-opacity duration-200 ${
+                rightSidebarOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+              }`}
+              aria-label="Close SSH terminal drawer"
+            />
+            <aside
+              className={`fixed right-0 top-[60px] bottom-0 w-full sm:w-[420px] max-w-full z-50 shadow-xl transition-transform duration-300 ease-in-out ${
+                rightSidebarOpen ? "translate-x-0" : "translate-x-full pointer-events-none"
+              }`}
+            >
+              <button
+                onClick={() => setRightSidebarOpen(false)}
+                className="absolute top-2 right-2 z-10 rounded-md bg-white/90 hover:bg-white p-1 text-gray-600 hover:text-gray-900"
+                aria-label="Close SSH terminal"
+              >
+                <X size={16} />
+              </button>
+              <RightSidebar
+                isOpen={rightSidebarOpen}
+                tabs={terminalTabs}
+                setTabs={setTerminalTabs}
+                activeTabId={activeTerminalId}
+                setActiveTabId={setActiveTerminalId}
+                showDeviceModal={showDeviceModal}
+                setShowDeviceModal={setShowDeviceModal}
+              />
+            </aside>
+          </>
+        )}
       </div>
     </div>
     </SSHTerminalContext.Provider>
