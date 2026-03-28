@@ -5,6 +5,7 @@ import { DeviceEdit } from "./pages/setup/DeviceEdit";
 import { ComplianceRules } from "./pages/setup/ComplianceRules";
 import { ComplianceRuleEdit } from "./pages/setup/ComplianceRuleEdit";
 import { DriftRemediation } from "./pages/setup/DriftRemediation";
+import { Schedulers } from "./pages/setup/Schedulers";
 import { ComplianceStatus } from "./pages/ComplianceStatus";
 import { History } from "./pages/History";
 import { Dashboard } from "./pages/Dashboard";
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { path: "setup/compliance-rules", Component: ComplianceRules },
       { path: "setup/compliance-rules/:id", Component: ComplianceRuleEdit },
       { path: "setup/drift-remediation", Component: DriftRemediation },
+      { path: "setup/schedulers", Component: Schedulers },
       { path: "compliance-status", Component: ComplianceStatus },
       { path: "history", Component: History },
     ],

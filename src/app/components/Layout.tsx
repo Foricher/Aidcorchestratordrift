@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, Outlet, useLocation } from "react-router";
-import { ChevronDown, ChevronRight, Menu, X, Terminal as TerminalIcon, Settings, CheckCircle, History, Database, Shield, Wrench, ChevronLeft } from "lucide-react";
+import { ChevronDown, ChevronRight, Menu, X, Terminal as TerminalIcon, Settings, CheckCircle, History, Database, Shield, Wrench, ChevronLeft, CalendarClock } from "lucide-react";
 import { PanelGroup, Panel, PanelResizeHandle } from "react-resizable-panels";
 import { RightSidebar } from "./RightSidebar";
 import { SSHTerminalContext } from "../context/SSHTerminalContext";
@@ -202,6 +202,18 @@ export function Layout() {
                         >
                           <Wrench size={sidebarCollapsed ? 16 : 12} />
                           {!sidebarCollapsed && <span>Remediation</span>}
+                        </Link>
+                        <Link
+                          to="/setup/schedulers"
+                          className={`flex items-center gap-2 px-2 py-1.5 text-sm rounded transition-colors ${
+                            isActive("/setup/schedulers")
+                              ? "bg-blue-50 text-blue-700 font-medium"
+                              : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                          } transition-all duration-300 ${sidebarCollapsed ? "justify-center p-1.5" : ""}`}
+                          title={sidebarCollapsed ? "Schedulers" : ""}
+                        >
+                          <CalendarClock size={sidebarCollapsed ? 16 : 12} />
+                          {!sidebarCollapsed && <span>Schedulers</span>}
                         </Link>
                       </div>
                     )}
